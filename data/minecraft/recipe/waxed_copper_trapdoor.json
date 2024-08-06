@@ -1,0 +1,17 @@
+{
+  "type": "crafting_shaped",
+  "group": "waxed_copper_trapdoor",
+  "pattern": [
+    "###",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:waxed_copper_block"
+    }
+  },
+  "result": {
+    "id": "minecraft:waxed_copper_trapdoor",
+    "count": 6
+  }
+}

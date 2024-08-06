@@ -1,0 +1,17 @@
+{
+  "type": "crafting_shaped",
+  "group": "weathered_copper_trapdoor",
+  "pattern": [
+    "###",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:weathered_copper"
+    }
+  },
+  "result": {
+    "id": "minecraft:weathered_copper_trapdoor",
+    "count": 6
+  }
+}

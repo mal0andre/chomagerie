@@ -1,0 +1,17 @@
+{
+  "type": "crafting_shaped",
+  "group": "copper_trapdoor",
+  "pattern": [
+    "###",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:copper_block"
+    }
+  },
+  "result": {
+    "id": "minecraft:copper_trapdoor",
+    "count": 6
+  }
+}

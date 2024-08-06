@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+      " G ",
+      "GRG",
+      " C "
+  ],
+  "key": {
+      "G": {
+          "item": "minecraft:glass"
+      },
+      "R": {
+          "item": "minecraft:glow_ink_sac"
+      },
+      "C": {
+          "item": "minecraft:copper_ingot"
+      }
+  },
+  "result": {
+      "id": "minecraft:light",
+      "count": 4
+  }
+}
