@@ -2,13 +2,16 @@
     "type": "crafting_shapeless",
     "ingredients": [
         {
-            "item": "minecraft:exposed_copper_door"
+            "item": "minecraft:cut_copper_slab"
+        },
+        {
+            "item": "minecraft:ice"
         },
         {
             "item": "minecraft:ice"
         }
     ],
     "result": {
-        "id": "minecraft:weathered_copper_door"
+        "id": "minecraft:weathered_cut_copper_slab"
     }
 }
