@@ -1,19 +1,19 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "NW",
-    "WN"
-  ],
-  "key": {
-    "W": {
-      "item": "minecraft:nether_wart_block"
-    },
-    "N": {
-      "item": "minecraft:nether_bricks"
-    }
-  },
-  "result": {
-    "id": "minecraft:red_nether_bricks",
-    "count": 4
-  }
+	"type": "minecraft:crafting_shaped",
+	"pattern": [
+		"NW",
+		"WN"
+	],
+	"key": {
+		"W": {
+			"item": "minecraft:nether_wart_block"
+		},
+		"N": {
+			"item": "minecraft:nether_bricks"
+		}
+	},
+	"result": {
+		"id": "minecraft:red_nether_bricks",
+		"count": 4
+	}
 }

@@ -1,14 +1,14 @@
 {
-    "type": "crafting_shapeless",
-    "ingredients": [
-        {
-            "item": "minecraft:cut_copper_slab"
-        },
-        {
-            "item": "minecraft:ice"
-        }
-    ],
-    "result": {
-        "id": "minecraft:exposed_cut_copper_slab"
-    }
+	"type": "crafting_shapeless",
+	"ingredients": [
+		{
+			"item": "minecraft:cut_copper_slab"
+		},
+		{
+			"item": "minecraft:ice"
+		}
+	],
+	"result": {
+		"id": "minecraft:exposed_cut_copper_slab"
+	}
 }
