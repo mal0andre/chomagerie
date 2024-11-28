@@ -1,20 +1,11 @@
 {
 	"pools": [
 		{
-			"rolls": 1,
+			"rolls": 2,
 			"entries": [
 				{
 					"type": "loot_table",
 					"name": "minecraft:entities/reference/extra/ender_dragon"
-				}
-			]
-		},
-		{
-			"rolls": 1,
-			"entries": [
-				{
-					"type": "loot_table",
-					"name": "minecraft:entities/reference/mmh/ender_dragon"
 				}
 			]
 		}
