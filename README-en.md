@@ -1,5 +1,5 @@
-[![fr](https://img.shields.io/badge/lang-fr-blue.svg)](https://github.com/mal0andre/chomagerie/blob/main/README.md)  
-[![en](https://img.shields.io/badge/lang-en-blue.svg)](https://github.com/mal0andre/chomagerie/blob/main/README-en.md)  
+[![fr](https://img.shields.io/badge/lang-fr-blue.svg)](https://github.com/mal0andre/chomagerie/blob/main/README.md)
+[![en](https://img.shields.io/badge/lang-en-blue.svg)](https://github.com/mal0andre/chomagerie/blob/main/README-en.md)
 
 ![TITLE](https://golriver.fr/assets/img/chomagerie_title.png)  
 
