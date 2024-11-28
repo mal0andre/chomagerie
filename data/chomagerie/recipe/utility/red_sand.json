@@ -1,21 +1,21 @@
 {
-    "type": "crafting_shaped",
-    "pattern": [
-      "###",
-      "#R#",
-      "###"
-    ],
-    "key": {
-      "R": {
-        "item": "minecraft:red_dye"
-      },
-      "#": {
-          "item": "minecraft:sand"
-      }
-    },
-    "result": {
-        "id": "minecraft:red_sand",
-        "count": 8
-    }
-  }
+	"type": "crafting_shaped",
+	"pattern": [
+		"###",
+		"#R#",
+		"###"
+	],
+	"key": {
+		"R": {
+			"item": "minecraft:red_dye"
+		},
+		"#": {
+			"item": "minecraft:sand"
+		}
+	},
+	"result": {
+		"id": "minecraft:red_sand",
+		"count": 8
+	}
+}
   

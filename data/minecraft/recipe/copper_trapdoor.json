@@ -1,17 +1,17 @@
 {
-  "type": "crafting_shaped",
-  "group": "copper_trapdoor",
-  "pattern": [
-    "###",
-    "###"
-  ],
-  "key": {
-    "#": {
-      "item": "minecraft:copper_ingot"
-    }
-  },
-  "result": {
-    "id": "minecraft:copper_trapdoor",
-    "count": 6
-  }
+	"type": "crafting_shaped",
+	"group": "copper_trapdoor",
+	"pattern": [
+		"###",
+		"###"
+	],
+	"key": {
+		"#": {
+			"item": "minecraft:copper_ingot"
+		}
+	},
+	"result": {
+		"id": "minecraft:copper_trapdoor",
+		"count": 6
+	}
 }

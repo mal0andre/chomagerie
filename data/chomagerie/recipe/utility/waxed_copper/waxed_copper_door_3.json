@@ -1,20 +1,20 @@
 {
-    "type": "crafting_shapeless",
-    "ingredients": [
-        {
-            "item": "minecraft:waxed_copper_door"
-        },
-        {
-            "item": "minecraft:ice"
-        },
-        {
-            "item": "minecraft:ice"
-        },
-        {
-            "item": "minecraft:ice"
-        }
-    ],
-    "result": {
-        "id": "minecraft:waxed_oxidized_copper_door"
-    }
+	"type": "crafting_shapeless",
+	"ingredients": [
+		{
+			"item": "minecraft:waxed_copper_door"
+		},
+		{
+			"item": "minecraft:ice"
+		},
+		{
+			"item": "minecraft:ice"
+		},
+		{
+			"item": "minecraft:ice"
+		}
+	],
+	"result": {
+		"id": "minecraft:waxed_oxidized_copper_door"
+	}
 }
