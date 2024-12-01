@@ -1,21 +1,19 @@
 {
-	"type": "crafting_shaped",
-	"group": "wool",
-	"pattern": [
-		"###",
-		"#X#",
-		"###"
-	],
-	"key": {
-		"#": {
-			"item": "minecraft:white_wool"
-		},
-		"X": {
-			"item": "minecraft:gray_dye"
-		}
-	},
-	"result": {
-		"id": "minecraft:gray_wool",
-		"count": 8
-	}
+  "type": "crafting_shaped",
+  "group": "wool",
+  "pattern": [
+    "###",
+    "#X#",
+    "###"
+  ],
+  "key": {
+    "#": "minecraft:white_wool"
+  },
+  "X": {
+    "item": "minecraft:gray_dye"
+  },
+  "result": {
+    "id": "minecraft:gray_wool",
+    "count": 8
+  }
 }

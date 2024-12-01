@@ -1,17 +1,15 @@
 {
-	"type": "crafting_shaped",
-	"group": "wooden_trapdoor",
-	"pattern": [
-		"###",
-		"###"
-	],
-	"key": {
-		"#": {
-			"item": "minecraft:bamboo_planks"
-		}
-	},
-	"result": {
-		"id": "minecraft:bamboo_trapdoor",
-		"count": 6
-	}
+  "type": "crafting_shaped",
+  "group": "wooden_trapdoor",
+  "pattern": [
+    "###",
+    "###"
+  ],
+  "key": {
+    "#": "minecraft:bamboo_planks"
+  },
+  "result": {
+    "id": "minecraft:bamboo_trapdoor",
+    "count": 6
+  }
 }

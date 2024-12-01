@@ -1,16 +1,14 @@
 {
-	"type": "crafting_shaped",
-	"pattern": [
-		"##",
-		"##"
-	],
-	"key": {
-		"#": {
-			"item": "minecraft:iron_ingot"
-		}
-	},
-	"result": {
-		"id": "minecraft:iron_trapdoor",
-		"count": 4
-	}
+  "type": "crafting_shaped",
+  "pattern": [
+    "##",
+    "##"
+  ],
+  "key": {
+    "#": "minecraft:iron_ingot"
+  },
+  "result": {
+    "id": "minecraft:iron_trapdoor",
+    "count": 4
+  }
 }
