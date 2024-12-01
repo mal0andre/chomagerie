@@ -1,12 +1,12 @@
 {
-	"type": "crafting_shapeless",
-	"ingredients": [
-		[
-			"minecraft:brain_coral_block"
-		]
-	],
-	"result": {
-		"id": "minecraft:brain_coral",
-		"count": 4
-	}
+  "type": "crafting_shapeless",
+  "ingredients": [
+    [
+      "minecraft:brain_coral_block"
+    ]
+  ],
+  "result": {
+    "id": "minecraft:brain_coral",
+    "count": 4
+  }
 }

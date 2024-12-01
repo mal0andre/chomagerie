@@ -1,23 +1,25 @@
 {
-	"type": "crafting_shapeless",
-	"ingredients": [
-		[
-			"minecraft:brain_coral",
-			"minecraft:brain_coral_fan"
-		],
-		[
-			"minecraft:brain_coral",
-			"minecraft:brain_coral_fan"
-		],[
-			"minecraft:brain_coral",
-			"minecraft:brain_coral_fan"
-		],[
-			"minecraft:brain_coral",
-			"minecraft:brain_coral_fan"
-		]
-	],
-	"result": {
-		"id": "minecraft:brain_coral_block",
-		"count": 1
-	}
+  "type": "crafting_shapeless",
+  "ingredients": [
+    [
+      "minecraft:brain_coral",
+      "minecraft:brain_coral_fan"
+    ],
+    [
+      "minecraft:brain_coral",
+      "minecraft:brain_coral_fan"
+    ],
+    [
+      "minecraft:brain_coral",
+      "minecraft:brain_coral_fan"
+    ],
+    [
+      "minecraft:brain_coral",
+      "minecraft:brain_coral_fan"
+    ]
+  ],
+  "result": {
+    "id": "minecraft:brain_coral_block",
+    "count": 1
+  }
 }

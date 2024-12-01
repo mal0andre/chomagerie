@@ -1,23 +1,25 @@
 {
-	"type": "crafting_shapeless",
-	"ingredients": [
-		[
-			"minecraft:horn_coral",
-			"minecraft:horn_coral_fan"
-		],
-		[
-			"minecraft:horn_coral",
-			"minecraft:horn_coral_fan"
-		],[
-			"minecraft:horn_coral",
-			"minecraft:horn_coral_fan"
-		],[
-			"minecraft:horn_coral",
-			"minecraft:horn_coral_fan"
-		]
-	],
-	"result": {
-		"id": "minecraft:horn_coral_block",
-		"count": 1
-	}
+  "type": "crafting_shapeless",
+  "ingredients": [
+    [
+      "minecraft:horn_coral",
+      "minecraft:horn_coral_fan"
+    ],
+    [
+      "minecraft:horn_coral",
+      "minecraft:horn_coral_fan"
+    ],
+    [
+      "minecraft:horn_coral",
+      "minecraft:horn_coral_fan"
+    ],
+    [
+      "minecraft:horn_coral",
+      "minecraft:horn_coral_fan"
+    ]
+  ],
+  "result": {
+    "id": "minecraft:horn_coral_block",
+    "count": 1
+  }
 }
