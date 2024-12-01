@@ -1,9 +1,9 @@
 {
 	"type": "crafting_shapeless",
 	"ingredients": [
-		{
-			"item": "minecraft:bubble_coral_block"
-		}
+		[
+			"minecraft:bubble_coral_block"
+		]
 	],
 	"result": {
 		"id": "minecraft:bubble_coral",

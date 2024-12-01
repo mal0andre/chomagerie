@@ -1,9 +1,9 @@
 {
 	"type": "crafting_shapeless",
 	"ingredients": [
-		{
-			"item": "minecraft:fire_coral_block"
-		}
+		[
+			"minecraft:fire_coral_block"
+		]
 	],
 	"result": {
 		"id": "minecraft:fire_coral",

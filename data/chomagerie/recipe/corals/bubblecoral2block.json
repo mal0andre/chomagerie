@@ -1,18 +1,20 @@
 {
 	"type": "crafting_shapeless",
 	"ingredients": [
-		{
-			"item": "minecraft:bubble_coral"
-		},
-		{
-			"item": "minecraft:bubble_coral"
-		},
-		{
-			"item": "minecraft:bubble_coral"
-		},
-		{
-			"item": "minecraft:bubble_coral"
-		}
+		[
+			"minecraft:bubble_coral",
+			"minecraft:bubble_coral_fan"
+		],
+		[
+			"minecraft:bubble_coral",
+			"minecraft:bubble_coral_fan"
+		],[
+			"minecraft:bubble_coral",
+			"minecraft:bubble_coral_fan"
+		],[
+			"minecraft:bubble_coral",
+			"minecraft:bubble_coral_fan"
+		]
 	],
 	"result": {
 		"id": "minecraft:bubble_coral_block",

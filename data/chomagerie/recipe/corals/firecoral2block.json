@@ -1,21 +1,25 @@
 {
-	"type": "crafting_shapeless",
-	"ingredients": [
-		{
-			"item": "minecraft:fire_coral"
-		},
-		{
-			"item": "minecraft:fire_coral"
-		},
-		{
-			"item": "minecraft:fire_coral"
-		},
-		{
-			"item": "minecraft:fire_coral"
-		}
-	],
-	"result": {
-		"id": "minecraft:fire_coral_block",
-		"count": 1
-	}
+  "type": "crafting_shapeless",
+  "ingredients": [
+    [
+      "minecraft:fire_coral",
+      "minecraft:fire_coral_fan"
+    ],
+    [
+      "minecraft:fire_coral",
+      "minecraft:fire_coral_fan"
+    ],
+    [
+      "minecraft:fire_coral",
+      "minecraft:fire_coral_fan"
+    ],
+    [
+      "minecraft:fire_coral",
+      "minecraft:fire_coral_fan"
+    ]
+  ],
+  "result": {
+    "id": "minecraft:fire_coral_block",
+    "count": 1
+  }
 }
