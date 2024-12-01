@@ -1,15 +1,15 @@
 {
 	"type": "crafting_shapeless",
 	"ingredients": [
-		{
-			"item": "minecraft:cut_copper"
-		},
-		{
-			"item": "minecraft:ice"
-		},
-		{
-			"item": "minecraft:ice"
-		}
+		[
+			 "minecraft:cut_copper"
+		],
+		[
+			 "minecraft:ice"
+		],
+		[
+			 "minecraft:ice"
+		]
 	],
 	"result": {
 		"id": "minecraft:weathered_cut_copper"

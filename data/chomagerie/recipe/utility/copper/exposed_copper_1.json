@@ -1,12 +1,12 @@
 {
 	"type": "crafting_shapeless",
 	"ingredients": [
-		{
-			"item": "minecraft:exposed_copper"
-		},
-		{
-			"item": "minecraft:ice"
-		}
+		[
+			 "minecraft:exposed_copper"
+		],
+		[
+			 "minecraft:ice"
+		]
 	],
 	"result": {
 		"id": "minecraft:weathered_copper"
