@@ -1,18 +1,18 @@
 {
-	"type": "minecraft:crafting_shapeless",
-	"ingredients": [
-		{
-			"item": "minecraft:bone"
-		},
-		{
-			"item": "minecraft:bone"
-		},
-		{
-			"item": "minecraft:bone"
-		}
-	],
-	"result": {
-		"id": "minecraft:bone_block",
-		"count": 1
-	}
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    [
+      "minecraft:bone"
+    ],
+    [
+      "minecraft:bone"
+    ],
+    [
+      "minecraft:bone"
+    ]
+  ],
+  "result": {
+    "id": "minecraft:bone_block",
+    "count": 1
+  }
 }
