@@ -1,17 +1,15 @@
 {
-	"type": "minecraft:stonecutting",
-	"category": "blocks",
-	"group": "light_block",
-	"ingredient": {
-		"item": "minecraft:light"
-	},
-	"result": {
-		"id": "minecraft:light",
-		"count": 1,
-		"components": {
-			"minecraft:block_state": {
-				"level": "10"
-			}
-		}
-	}
+  "type": "minecraft:stonecutting",
+  "category": "blocks",
+  "group": "light_block",
+  "ingredient": "minecraft:light",
+  "result": {
+    "id": "minecraft:light",
+    "count": 1,
+    "components": {
+      "minecraft:block_state": {
+        "level": "10"
+      }
+    }
+  }
 }
