@@ -9,11 +9,9 @@
   "key": {
     "#": "minecraft:white_wool"
   },
-  "X": {
-    "item": "minecraft:gray_dye"
-  },
+  "X": "minecraft:magenta_dye",
   "result": {
-    "id": "minecraft:gray_wool",
+    "id": "minecraft:magenta_wool",
     "count": 8
   }
 }
