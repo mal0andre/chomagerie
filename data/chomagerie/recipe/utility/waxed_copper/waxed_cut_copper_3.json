@@ -1,18 +1,10 @@
 {
 	"type": "crafting_shapeless",
 	"ingredients": [
-		{
-			"item": "minecraft:waxed_cut_copper"
-		},
-		{
-			"item": "minecraft:ice"
-		},
-		{
-			"item": "minecraft:ice"
-		},
-		{
-			"item": "minecraft:ice"
-		}
+		"minecraft:waxed_cut_copper",
+		"minecraft:ice",
+		"minecraft:ice",
+		"minecraft:ice"
 	],
 	"result": {
 		"id": "minecraft:waxed_oxidized_cut_copper"

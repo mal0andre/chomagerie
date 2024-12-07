@@ -1,12 +1,8 @@
 {
 	"type": "crafting_shapeless",
 	"ingredients": [
-		{
-			"item": "minecraft:waxed_exposed_copper_trapdoor"
-		},
-		{
-			"item": "minecraft:ice"
-		}
+		"minecraft:waxed_exposed_copper_trapdoor",
+		"minecraft:ice"
 	],
 	"result": {
 		"id": "minecraft:waxed_weathered_copper_trapdoor"

@@ -1,12 +1,8 @@
 {
 	"type": "crafting_shapeless",
 	"ingredients": [
-		{
-			"item": "minecraft:waxed_cut_copper_stairs"
-		},
-		{
-			"item": "minecraft:ice"
-		}
+		"minecraft:waxed_cut_copper_stairs",
+		"minecraft:ice"
 	],
 	"result": {
 		"id": "minecraft:waxed_exposed_cut_copper_stairs"

@@ -1,12 +1,8 @@
 {
 	"type": "crafting_shapeless",
 	"ingredients": [
-		{
-			"item": "minecraft:waxed_exposed_cut_copper_slab"
-		},
-		{
-			"item": "minecraft:ice"
-		}
+		"minecraft:waxed_exposed_cut_copper_slab",
+		"minecraft:ice"
 	],
 	"result": {
 		"id": "minecraft:waxed_weathered_cut_copper_slab"
