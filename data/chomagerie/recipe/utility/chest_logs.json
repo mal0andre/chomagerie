@@ -6,7 +6,7 @@
     "###"
   ],
   "key": {
-    "#": "minecraft:logs"
+    "#": "#minecraft:logs"
   },
   "result": {
     "id": "minecraft:chest",
