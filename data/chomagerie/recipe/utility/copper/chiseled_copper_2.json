@@ -1,17 +1,11 @@
 {
-	"type": "crafting_shapeless",
-	"ingredients": [
-		[
-			 "minecraft:chiseled_copper"
-		],
-		[
-			 "minecraft:ice"
-		],
-		[
-			 "minecraft:ice"
-		]
-	],
-	"result": {
-		"id": "minecraft:weathered_chiseled_copper"
-	}
+  "type": "crafting_shapeless",
+  "ingredients": [
+	"minecraft:chiseled_copper",
+	"minecraft:ice",
+	"minecraft:ice"
+  ],
+  "result": {
+	"id": "minecraft:weathered_chiseled_copper"
+  }
 }

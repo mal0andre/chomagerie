@@ -1,14 +1,10 @@
 {
-	"type": "crafting_shapeless",
-	"ingredients": [
-		[
-			 "minecraft:copper_block"
-		],
-		[
-			 "minecraft:ice"
-		]
-	],
-	"result": {
-		"id": "minecraft:exposed_copper"
-	}
+  "type": "crafting_shapeless",
+  "ingredients": [
+	"minecraft:copper_block",
+	"minecraft:ice"
+  ],
+  "result": {
+	"id": "minecraft:exposed_copper"
+  }
 }

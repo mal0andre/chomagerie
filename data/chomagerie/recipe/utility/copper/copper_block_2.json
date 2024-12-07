@@ -1,17 +1,11 @@
 {
-	"type": "crafting_shapeless",
-	"ingredients": [
-		[
-			 "minecraft:copper_block"
-		],
-		[
-			 "minecraft:ice"
-		],
-		[
-			 "minecraft:ice"
-		]
-	],
-	"result": {
-		"id": "minecraft:weathered_copper"
-	}
+  "type": "crafting_shapeless",
+  "ingredients": [
+	"minecraft:copper_block",
+	"minecraft:ice",
+	"minecraft:ice"
+  ],
+  "result": {
+	"id": "minecraft:weathered_copper"
+  }
 }

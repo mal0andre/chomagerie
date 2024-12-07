@@ -1,14 +1,10 @@
 {
-	"type": "crafting_shapeless",
-	"ingredients": [
-		[
-			 "minecraft:weathered_copper_trapdoor"
-		],
-		[
-			 "minecraft:ice"
-		]
-	],
-	"result": {
-		"id": "minecraft:oxidized_copper_trapdoor"
-	}
+  "type": "crafting_shapeless",
+  "ingredients": [
+	"minecraft:weathered_copper_trapdoor",
+	"minecraft:ice"
+  ],
+  "result": {
+	"id": "minecraft:oxidized_copper_trapdoor"
+  }
 }

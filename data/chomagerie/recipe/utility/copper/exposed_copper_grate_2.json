@@ -1,17 +1,11 @@
 {
-	"type": "crafting_shapeless",
-	"ingredients": [
-		[
-			 "minecraft:exposed_copper_grate"
-		],
-		[
-			 "minecraft:ice"
-		],
-		[
-			 "minecraft:ice"
-		]
-	],
-	"result": {
-		"id": "minecraft:oxidized_copper_grate"
-	}
+  "type": "crafting_shapeless",
+  "ingredients": [
+	"minecraft:exposed_copper_grate",
+	"minecraft:ice",
+	"minecraft:ice"
+  ],
+  "result": {
+	"id": "minecraft:oxidized_copper_grate"
+  }
 }
