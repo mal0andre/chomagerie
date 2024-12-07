@@ -43,8 +43,8 @@
 
 | Version(s)        | Lien                                                                                   | Statut            |
 |----------------|----------------------------------------------------------------------------------------|-------------------|
-| **1.21.3**       | [Lien vers la branche](https://github.com/mal0andre/chomagerie/tree/1.21.3)         | 🟠 En développement  |
-| **1.21**       | [Lien vers la branche](https://github.com/mal0andre/chomagerie/tree/1.21)         | 🟢 Fonctionnelle  |
+| **1.21.2 - 1.21.3**       | [Lien vers la branche](https://github.com/mal0andre/chomagerie/tree/1.21.2-1.21.3)         | 🟢 Fonctionnelle  |
+| **1.21 - 1.21.1**       | [Lien vers la branche](https://github.com/mal0andre/chomagerie/tree/1.21-1.21.1)         | 🟢 Fonctionnelle  |
 | **1.20 et avant**       |          | 🔴 Non prévue  |
 
 
