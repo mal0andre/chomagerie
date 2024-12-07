@@ -1,16 +1,17 @@
-# 📦 Chomagerie - Version 1.21.2 - 1.21.3
+# 📦 Chomagerie - Version 1.21.2+
 
 ## 📝 Description  
 
-Bienvenue sur la branche de la **1.21.2** et **1.21.3** du datapack **Chomagerie** !  
-Cette version est entièrement fonctionnelle et compatible avec Minecraft **1.21.2** et **1.21.3**. Elle propose des
+Bienvenue sur la branche de la **1.21.2+** du datapack **Chomagerie** !  
+Cette version est entièrement fonctionnelle et compatible avec Minecraft **1.21.2**, **1.21.3** et **1.21.4**. Elle
+propose des
 recettes simplifiées pour enrichir votre gameplay tout en restant équilibrée.
 
 ## 🚀 Installation  
 
 1. Téléchargez le contenu de cette branche via le bouton **Code > Download ZIP** ou clonez-la avec :  
    ```bash  
-   git clone -b 1.21.2-1.21.3 https://github.com/mal0andre/chomagerie.git  
+   git clone -b 1.21.2+ https://github.com/mal0andre/chomagerie.git  
    ```  
 2. Placez le dossier décompressé dans :  
    ```
@@ -33,4 +34,5 @@ recettes simplifiées pour enrichir votre gameplay tout en restant équilibrée.
 
 ## 🛠️ Contributions  
 
-Des idées ou des suggestions ? Participez au développement en signalant un problème ou en soumettant une **Pull Request**.  
+Des idées ou des suggestions ? Participez au développement en signalant un problème ou en soumettant une **Pull Request
+**.  
