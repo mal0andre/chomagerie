@@ -2,14 +2,14 @@
   "type": "crafting_shaped",
   "group": "wooden_trapdoor",
   "pattern": [
-    "###",
-    "###"
+	"###",
+	"###"
   ],
   "key": {
-    "#": "minecraft:spruce_planks"
+	"#": "minecraft:cherry_planks"
   },
   "result": {
-    "id": "minecraft:spruce_trapdoor",
-    "count": 6
+	"id": "minecraft:cherry_trapdoor",
+	"count": 6
   }
 }

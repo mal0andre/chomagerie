@@ -2,14 +2,14 @@
   "type": "crafting_shaped",
   "group": "wooden_trapdoor",
   "pattern": [
-    "###",
-    "###"
+	"###",
+	"###"
   ],
   "key": {
-    "#": "minecraft:acacia_planks"
+	"#": "minecraft:jungle_planks"
   },
   "result": {
-    "id": "minecraft:acacia_trapdoor",
-    "count": 6
+	"id": "minecraft:jungle_trapdoor",
+	"count": 6
   }
 }
