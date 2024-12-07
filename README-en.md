@@ -41,11 +41,11 @@
 
 ## 📋 Available Versions  
 
-| Version(s)           | Link                                                                      | Status         |
-|----------------------|---------------------------------------------------------------------------|----------------|
-| **1.21.2 - 1.21.3**  | [Branch Link](https://github.com/mal0andre/chomagerie/tree/1.21.2-1.21.3) | 🟢 Functional  |
-| **1.21 - 1.21.1**    | [Branch Link](https://github.com/mal0andre/chomagerie/tree/1.21-1.21.1)   | 🟢 Functional  |
-| **1.20 and earlier** |                                                                           | 🔴 Not Planned |
+| Version(s)                   | Link                                                                | Status         |
+|------------------------------|---------------------------------------------------------------------|----------------|
+| **1.21.2 - 1.21.3 - 1.21.4** | [Branch Link](https://github.com/mal0andre/chomagerie/tree/1.21.2+) | 🟢 Functional  |
+| **1.21 - 1.21.1**            | [Branch Link](https://github.com/mal0andre/chomagerie/tree/1.21+)   | 🟢 Functional  |
+| **1.20 and earlier**         |                                                                     | 🔴 Not Planned |
 
 > [!NOTE]  
 > ✅ Status  
