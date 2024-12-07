@@ -2,8 +2,8 @@
 
 ## 📝 Description  
 
-Bienvenue sur la branche de la **1.21** et **1.21.1** du datapack **Chomagerie** !  
-Cette version est entièrement fonctionnelle et compatible avec Minecraft **1.21** et **1.21.1**. Elle propose des
+Bienvenue sur la branche de la **1.21.2** et **1.21.3** du datapack **Chomagerie** !  
+Cette version est entièrement fonctionnelle et compatible avec Minecraft **1.21.2** et **1.21.3**. Elle propose des
 recettes simplifiées pour enrichir votre gameplay tout en restant équilibrée.
 
 ## 🚀 Installation  
