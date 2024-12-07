@@ -5,7 +5,7 @@
 			"entries": [
 				{
 					"type": "loot_table",
-					"name": "minecraft:entities/reference/extra/ender_dragon"
+					"value": "vanilla:entities/ender_dragon"
 				}
 			]
 		},
@@ -14,7 +14,7 @@
 			"entries": [
 				{
 					"type": "loot_table",
-					"name": "minecraft:entities/reference/mmh/ender_dragon"
+					"value": "chomagerie:entities/ender_dragon"
 				}
 			]
 		}
