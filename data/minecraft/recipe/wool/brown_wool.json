@@ -7,9 +7,9 @@
     "###"
   ],
   "key": {
-    "#": "minecraft:white_wool"
+    "#": "minecraft:white_wool",
+    "X": "minecraft:brown_dye"
   },
-  "X": "minecraft:brown_dye",
   "result": {
     "id": "minecraft:brown_wool",
     "count": 8
