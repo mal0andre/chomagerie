@@ -4,12 +4,12 @@
   "group": "light_block",
   "ingredient": "minecraft:light",
   "result": {
-    "id": "minecraft:light",
-    "count": 1,
-    "components": {
-      "minecraft:block_state": {
-        "level": "15"
-      }
-    }
+	"id": "minecraft:light",
+	"count": 1,
+	"components": {
+	  "minecraft:block_state": {
+		"level": "15"
+	  }
+	}
   }
 }

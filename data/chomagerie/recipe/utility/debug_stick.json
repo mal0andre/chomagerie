@@ -2,17 +2,17 @@
   "type": "crafting_shaped",
   "group": "chomagerie",
   "pattern": [
-    " GN",
-    "RSG",
-    "SR "
+	" GN",
+	"RSG",
+	"SR "
   ],
   "key": {
-    "G": "minecraft:gold_ingot",
-    "N": "minecraft:netherite_ingot",
-    "R": "minecraft:redstone",
-    "S": "minecraft:stick"
+	"G": "minecraft:gold_ingot",
+	"N": "minecraft:netherite_ingot",
+	"R": "minecraft:redstone",
+	"S": "minecraft:stick"
   },
   "result": {
-    "id": "minecraft:debug_stick"
+	"id": "minecraft:debug_stick"
   }
 }

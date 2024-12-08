@@ -2,16 +2,16 @@
   "type": "crafting_shaped",
   "group": "wool",
   "pattern": [
-    "###",
-    "#X#",
-    "###"
+	"###",
+	"#X#",
+	"###"
   ],
   "key": {
-    "#": "minecraft:white_wool",
-    "X": "minecraft:brown_dye"
+	"#": "minecraft:white_wool",
+	"X": "minecraft:brown_dye"
   },
   "result": {
-    "id": "minecraft:brown_wool",
-    "count": 8
+	"id": "minecraft:brown_wool",
+	"count": 8
   }
 }

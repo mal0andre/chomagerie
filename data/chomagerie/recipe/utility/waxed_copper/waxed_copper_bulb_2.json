@@ -1,11 +1,11 @@
 {
-	"type": "crafting_shapeless",
-	"ingredients": [
-		"minecraft:waxed_copper_bulb",
-		"minecraft:ice",
-		"minecraft:ice"
-	],
-	"result": {
-		"id": "minecraft:waxed_weathered_copper_bulb"
-	}
+  "type": "crafting_shapeless",
+  "ingredients": [
+	"minecraft:waxed_copper_bulb",
+	"minecraft:ice",
+	"minecraft:ice"
+  ],
+  "result": {
+	"id": "minecraft:waxed_weathered_copper_bulb"
+  }
 }

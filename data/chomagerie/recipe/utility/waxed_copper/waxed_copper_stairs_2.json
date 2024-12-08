@@ -1,11 +1,11 @@
 {
-	"type": "crafting_shapeless",
-	"ingredients": [
-		"minecraft:waxed_cut_copper_stairs",
-		"minecraft:ice",
-		"minecraft:ice"
-	],
-	"result": {
-		"id": "minecraft:waxed_weathered_cut_copper_stairs"
-	}
+  "type": "crafting_shapeless",
+  "ingredients": [
+	"minecraft:waxed_cut_copper_stairs",
+	"minecraft:ice",
+	"minecraft:ice"
+  ],
+  "result": {
+	"id": "minecraft:waxed_weathered_cut_copper_stairs"
+  }
 }

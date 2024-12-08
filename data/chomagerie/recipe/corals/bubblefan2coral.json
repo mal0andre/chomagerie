@@ -1,12 +1,12 @@
 {
   "type": "crafting_shapeless",
   "ingredients": [
-    [
-      "minecraft:bubble_coral_fan"
-    ]
+	[
+	  "minecraft:bubble_coral_fan"
+	]
   ],
   "result": {
-    "id": "minecraft:bubble_coral",
-    "count": 1
+	"id": "minecraft:bubble_coral",
+	"count": 1
   }
 }

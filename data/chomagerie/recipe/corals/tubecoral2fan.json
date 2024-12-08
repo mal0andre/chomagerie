@@ -1,12 +1,12 @@
 {
   "type": "crafting_shapeless",
   "ingredients": [
-    [
-      "minecraft:tube_coral"
-    ]
+	[
+	  "minecraft:tube_coral"
+	]
   ],
   "result": {
-    "id": "minecraft:tube_coral_fan",
-    "count": 1
+	"id": "minecraft:tube_coral_fan",
+	"count": 1
   }
 }
