@@ -1,6 +1,7 @@
 {
     "pack": {
         "pack_format": 57,
+        "supported_formats": {"min_inclusive": 57, "max_inclusive": 61},
         "description": "Datapack officielles du serveur Chomagerie."
     }
 }
