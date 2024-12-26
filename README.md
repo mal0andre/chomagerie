@@ -11,7 +11,7 @@
 🩵⚒️, rendant certaines recettes plus accessibles tout en respectant l'équilibre du gameplay ⚖️. Ce datapack est idéal
 pour les joueurs cherchant à simplifier certains aspects de la survie ou à personnaliser leur expérience de jeu 🏕️.
 
-![Pack Icon](https://github.com/mal0andre/chomagerie/blob/1.21/pack.png?raw=true)
+![Pack Icon](https://github.com/mal0andre/chomagerie/blob/1.21+/pack.png)
 
 > [!IMPORTANT]  
 > Chaque branche du dépôt correspond à une version spécifique du datapack, assurant une compatibilité optimale avec
