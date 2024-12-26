@@ -48,8 +48,8 @@ pour les joueurs cherchant à simplifier certains aspects de la survie ou à per
 
 | Version(s)                   | Lien                                                                         | Statut           | Lien de téléchargement                                                      |
 |------------------------------|------------------------------------------------------------------------------|------------------|-----------------------------------------------------------------------------|
-| **1.21.2 - 1.21.3 - 1.21.4** | [Lien vers la branche](https://github.com/mal0andre/chomagerie/tree/1.21.2+) | 🟢 Fonctionnelle | [Télécharger](https://github.com/mal0andre/chomagerie/releases/tag/1.21.2+) |
-| **1.21 - 1.21.1**            | [Lien vers la branche](https://github.com/mal0andre/chomagerie/tree/1.21+)   | 🟢 Fonctionnelle | [Télécharger](https://github.com/mal0andre/chomagerie/releases/tag/1.21+)   |
+| **1.21.2 - 1.21.3 - 1.21.4** | [Lien vers la branche](https://github.com/mal0andre/chomagerie/tree/1.21.2+) | 🟢 Fonctionnelle | [Télécharger](https://github.com/mal0andre/chomagerie/archive/refs/tags/1.21.2+.zip) |
+| **1.21 - 1.21.1**            | [Lien vers la branche](https://github.com/mal0andre/chomagerie/tree/1.21+)   | 🟢 Fonctionnelle | [Télécharger](https://github.com/mal0andre/chomagerie/archive/refs/tags/1.21+.zip)   |
 | **1.20 et avant**            |                                                                              | 🔴 Non prévue    |                                                                             |
 
 > [!NOTE]  
