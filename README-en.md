@@ -11,7 +11,7 @@
 certain recipes more accessible while maintaining gameplay balance ⚖️. This datapack is perfect for players looking to
 simplify aspects of survival or customize their gaming experience 🏕️.
 
-![Pack Icon](https://github.com/mal0andre/chomagerie/blob/1.21/pack.png?raw=true)
+![Pack Icon](https://github.com/mal0andre/chomagerie/blob/1.21+/pack.png)
 
 > [!IMPORTANT]  
 > Each branch of the repository corresponds to a specific version of the datapack, ensuring optimal compatibility with
