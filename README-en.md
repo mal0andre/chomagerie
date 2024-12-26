@@ -47,8 +47,8 @@ simplify aspects of survival or customize their gaming experience 🏕️.
 
 | Version(s)                   | Link                                                                   | Status         | Download Link                                                            |
 |------------------------------|------------------------------------------------------------------------|----------------|--------------------------------------------------------------------------|
-| **1.21.2 - 1.21.3 - 1.21.4** | [Link to branch](https://github.com/mal0andre/chomagerie/tree/1.21.2+) | 🟢 Functional  | [Download](https://github.com/mal0andre/chomagerie/releases/tag/1.21.2+) |
-| **1.21 - 1.21.1**            | [Link to branch](https://github.com/mal0andre/chomagerie/tree/1.21+)   | 🟢 Functional  | [Download](https://github.com/mal0andre/chomagerie/releases/tag/1.21+)   |
+| **1.21.2 - 1.21.3 - 1.21.4** | [Link to branch](https://github.com/mal0andre/chomagerie/tree/1.21.2+) | 🟢 Functional  | [Download](https://github.com/mal0andre/chomagerie/archive/refs/tags/1.21.2+.zip) |
+| **1.21 - 1.21.1**            | [Link to branch](https://github.com/mal0andre/chomagerie/tree/1.21+)   | 🟢 Functional  | [Download](https://github.com/mal0andre/chomagerie/archive/refs/tags/1.21+.zip)   |
 | **1.20 and earlier**         |                                                                        | 🔴 Not planned |                                                                          |
 
 > [!NOTE]  
