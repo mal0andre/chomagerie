@@ -1,4 +1,4 @@
-# 📦 Chomagerie - Version 1.21.2+
+# 📦 Chomagerie - Version 1.21+
 
 ## 📝 Description
 
