@@ -1,8 +1,12 @@
 {
   "type": "crafting_shapeless",
   "ingredients": [
-	"minecraft:copper_bulb",
-	"minecraft:ice"
+	[
+	  "minecraft:copper_bulb"
+	],
+	[
+	  "minecraft:ice"
+	]
   ],
   "result": {
 	"id": "minecraft:exposed_copper_bulb"

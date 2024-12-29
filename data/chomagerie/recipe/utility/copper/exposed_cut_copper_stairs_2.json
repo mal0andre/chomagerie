@@ -1,9 +1,15 @@
 {
   "type": "crafting_shapeless",
   "ingredients": [
-	"minecraft:exposed_cut_copper_stairs",
-	"minecraft:ice",
-	"minecraft:ice"
+	[
+	  "minecraft:exposed_cut_copper_stairs"
+	],
+	[
+	  "minecraft:ice"
+	],
+	[
+	  "minecraft:ice"
+	]
   ],
   "result": {
 	"id": "minecraft:oxidized_cut_copper_stairs"

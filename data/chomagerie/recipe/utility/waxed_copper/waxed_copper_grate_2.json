@@ -1,9 +1,15 @@
 {
   "type": "crafting_shapeless",
   "ingredients": [
-	"minecraft:waxed_copper_grate",
-	"minecraft:ice",
-	"minecraft:ice"
+	[
+	  "minecraft:waxed_copper_grate"
+	],
+	[
+	  "minecraft:ice"
+	],
+	[
+	  "minecraft:ice"
+	]
   ],
   "result": {
 	"id": "minecraft:waxed_weathered_copper_grate"
