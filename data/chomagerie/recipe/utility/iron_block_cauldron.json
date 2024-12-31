@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+	"X": "minecraft:iron_block"
+  },
+  "pattern": [
+	"X X",
+	"X X",
+	"XXX"
+  ],
+  "result": {
+	"count": 9,
+	"id": "minecraft:cauldron"
+  }
+}

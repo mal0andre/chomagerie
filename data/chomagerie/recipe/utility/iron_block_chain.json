@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+	"X": "minecraft:iron_block",
+	"O": "minecraft:iron_ingot"
+  },
+  "pattern": [
+	"O",
+	"X",
+	"O"
+  ],
+  "result": {
+	"count": 9,
+	"id": "minecraft:chain"
+  }
+}
