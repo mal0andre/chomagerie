@@ -1,9 +1,10 @@
 {
   "type": "minecraft:smelting",
+  "category": "misc",
+  "cookingtime": 200,
+  "experience": 1,
   "ingredient": "minecraft:moss_block",
   "result": {
-	"id": "minecraft:green_dye"
-  },
-  "experience": 1,
-  "cookingtime": 200
+    "id": "minecraft:green_dye"
+  }
 }
