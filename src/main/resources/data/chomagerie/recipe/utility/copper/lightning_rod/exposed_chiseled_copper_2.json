@@ -1,0 +1,11 @@
+{
+  "type": "crafting_shapeless",
+  "ingredients": [
+    "minecraft:exposed_lightning_rod",
+    "minecraft:ice",
+    "minecraft:ice"
+  ],
+  "result": {
+    "id": "minecraft:oxidized_lightning_rod"
+  }
+}
