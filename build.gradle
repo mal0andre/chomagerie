@@ -87,9 +87,10 @@ dependencies {
 
     implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
 
-    implementation "com.terraformersmc:modmenu:20.0.1"
+    // ModMenu - compile only so it's not required at runtime
+    compileOnly "com.terraformersmc:modmenu:${project.modmenu_version}"
 
-    // Cloth Config - essayer d'abord depuis le dépôt Shedaniel, sinon utiliser Modrinth
+    // Cloth Config
     implementation("me.shedaniel.cloth:cloth-config-fabric:26.2.155") {
         exclude(group: "net.fabricmc.fabric-api")
     }
