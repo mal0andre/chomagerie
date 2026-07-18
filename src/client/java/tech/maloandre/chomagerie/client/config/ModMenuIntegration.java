@@ -5,7 +5,7 @@ import com.terraformersmc.modmenu.api.ModMenuApi;
 import me.shedaniel.clothconfig2.api.ConfigBuilder;
 import me.shedaniel.clothconfig2.api.ConfigCategory;
 import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
-import net.minecraft.text.Text;
+import net.minecraft.network.chat.Component;
 import tech.maloandre.chomagerie.config.ModState;
 
 public class ModMenuIntegration implements ModMenuApi {
@@ -19,19 +19,19 @@ public class ModMenuIntegration implements ModMenuApi {
 
             ConfigBuilder builder = ConfigBuilder.create()
                     .setParentScreen(parent)
-                    .setTitle(Text.literal("Chomagerie Configuration"));
+                    .setTitle(Component.literal("Chomagerie Configuration"));
 
             // ShulkerRefill category
-            ConfigCategory shulkerRefillCategory = builder.getOrCreateCategory(Text.literal("ShulkerRefill"));
+            ConfigCategory shulkerRefillCategory = builder.getOrCreateCategory(Component.literal("ShulkerRefill"));
             ConfigEntryBuilder entryBuilder = builder.entryBuilder();
 
             // Option to show refill messages
             shulkerRefillCategory.addEntry(entryBuilder.startBooleanToggle(
-                            Text.literal("Show Messages"),
+                            Component.literal("Show Messages"),
                             config.shulkerRefill.shouldShowRefillMessages()
                     )
                     .setDefaultValue(true)
-                    .setTooltip(Text.literal("Displays a message when an item is refilled from a shulker box"))
+                    .setTooltip(Component.literal("Displays a message when an item is refilled from a shulker box"))
                     .setSaveConsumer(newValue -> {
                         config.shulkerRefill.setShowRefillMessages(newValue);
                     })
@@ -39,11 +39,11 @@ public class ModMenuIntegration implements ModMenuApi {
 
             // Option to enable/disable ShulkerRefill
             shulkerRefillCategory.addEntry(entryBuilder.startBooleanToggle(
-                            Text.literal("Enable ShulkerRefill"),
+                            Component.literal("Enable ShulkerRefill"),
                             config.shulkerRefill.isEnabled()
                     )
                     .setDefaultValue(true)
-                    .setTooltip(Text.literal("Enables or disables the automatic refill system from shulker boxes"))
+                    .setTooltip(Component.literal("Enables or disables the automatic refill system from shulker boxes"))
                     .setSaveConsumer(newValue -> {
                         config.shulkerRefill.setEnabled(newValue);
                         ModState.setClientEnabled(newValue);
@@ -53,11 +53,11 @@ public class ModMenuIntegration implements ModMenuApi {
 
             // Option to play sounds during refill
             shulkerRefillCategory.addEntry(entryBuilder.startBooleanToggle(
-                            Text.literal("Play Sounds"),
+                            Component.literal("Play Sounds"),
                             config.shulkerRefill.shouldPlaySounds()
                     )
                     .setDefaultValue(true)
-                    .setTooltip(Text.literal("Plays a sound when an item is refilled from a shulker box"))
+                    .setTooltip(Component.literal("Plays a sound when an item is refilled from a shulker box"))
                     .setSaveConsumer(newValue -> {
                         config.shulkerRefill.setPlaySounds(newValue);
                     })
@@ -65,11 +65,11 @@ public class ModMenuIntegration implements ModMenuApi {
 
             // Option to filter by shulker box name
             shulkerRefillCategory.addEntry(entryBuilder.startBooleanToggle(
-                            Text.literal("Filter by Shulker Name"),
+                            Component.literal("Filter by Shulker Name"),
                             config.shulkerRefill.isFilterByNameEnabled()
                     )
                     .setDefaultValue(false)
-                    .setTooltip(Text.literal("Only uses shulker boxes with a specific name for refill"))
+                    .setTooltip(Component.literal("Only uses shulker boxes with a specific name for refill"))
                     .setSaveConsumer(newValue -> {
                         config.shulkerRefill.setFilterByName(newValue);
                     })
@@ -77,11 +77,11 @@ public class ModMenuIntegration implements ModMenuApi {
 
             // Option to set the name of shulker boxes to use
             shulkerRefillCategory.addEntry(entryBuilder.startStrField(
-                            Text.literal("Shulker Box Name"),
+                            Component.literal("Shulker Box Name"),
                             config.shulkerRefill.getShulkerNameFilter()
                     )
                     .setDefaultValue("restock same")
-                    .setTooltip(Text.literal("Only shulker boxes with this exact name will be used for refill"))
+                    .setTooltip(Component.literal("Only shulker boxes with this exact name will be used for refill"))
                     .setSaveConsumer(newValue -> {
                         config.shulkerRefill.setShulkerNameFilter(newValue);
                     })

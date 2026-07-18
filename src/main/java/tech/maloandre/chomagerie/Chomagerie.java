@@ -4,7 +4,7 @@ import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.level.ServerPlayer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import tech.maloandre.chomagerie.config.ServerConfig;
@@ -26,8 +26,8 @@ public class Chomagerie implements ModInitializer {
         ServerConfig.getInstance();
 
         // Register network packet types
-        PayloadTypeRegistry.playC2S().register(ConfigSyncPayload.ID, ConfigSyncPayload.CODEC);
-        PayloadTypeRegistry.playS2C().register(RefillNotificationPayload.ID, RefillNotificationPayload.CODEC);
+        PayloadTypeRegistry.serverboundPlay().register(ConfigSyncPayload.ID, ConfigSyncPayload.CODEC);
+        PayloadTypeRegistry.clientboundPlay().register(RefillNotificationPayload.ID, RefillNotificationPayload.CODEC);
 
         // Register server-side network handler
         ConfigSyncPayload.registerServerHandler();
@@ -41,16 +41,16 @@ public class Chomagerie implements ModInitializer {
 
         // Register automatic refill event from shulker boxes
         ItemStackDepletedCallback.EVENT.register((player, slot, item, previousStack) -> {
-            if (!player.getEntityWorld().isClient()) {
+            if (!player.level().isClientSide()) {
                 // Check if the mod is enabled for this player on the server
                 // This method now also checks if the player has the mod installed
-                boolean isEnabled = ServerConfig.getInstance().isShulkerRefillEnabled(player.getUuid());
+                boolean isEnabled = ServerConfig.getInstance().isShulkerRefillEnabled(player.getUUID());
 
                 if (isEnabled) {
                     // Get the filtering parameters for this player
                     ServerConfig config = ServerConfig.getInstance();
-                    boolean filterByName = config.isFilterByNameEnabled(player.getUuid());
-                    String nameFilter = config.getShulkerNameFilter(player.getUuid());
+                    boolean filterByName = config.isFilterByNameEnabled(player.getUUID());
+                    String nameFilter = config.getShulkerNameFilter(player.getUUID());
 
                     // Use previousStack to get the complete item data (including enchantment levels for fireworks)
                     ShulkerRefillHandler.RefillResult result = ShulkerRefillHandler.tryRefillFromShulker(
@@ -58,10 +58,10 @@ public class Chomagerie implements ModInitializer {
                     );
 
                     // If refill succeeded, send notification to client
-                    if (result.success() && player instanceof ServerPlayerEntity serverPlayer) {
+                    if (result.success() && player instanceof ServerPlayer serverPlayer) {
                         ServerPlayNetworking.send(serverPlayer, new RefillNotificationPayload(result.itemName()));
                     }
-                } else if (!ServerConfig.getInstance().playerHasMod(player.getUuid())) {
+                } else if (!ServerConfig.getInstance().playerHasMod(player.getUUID())) {
                     // Player doesn't have the mod, do nothing (silent)
                     LOGGER.debug("Refill ignored for {} - Mod not installed", player.getName().getString());
                 }
