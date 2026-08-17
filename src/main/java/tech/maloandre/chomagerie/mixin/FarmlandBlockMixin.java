@@ -20,7 +20,7 @@ public abstract class FarmlandBlockMixin {
     @Redirect(
             method = "fallOn",
             at = @At(
-                    value = "INVOKESTATIC",
+                    value = "INVOKE",
                     target = "Lnet/minecraft/world/level/block/FarmlandBlock;turnToDirt(Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;)V"
             )
     )
