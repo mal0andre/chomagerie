@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import tech.maloandre.chomagerie.config.ServerConfig;
 import tech.maloandre.chomagerie.event.ItemStackDepletedCallback;
+import tech.maloandre.chomagerie.gamerule.ModGameRules;
 import tech.maloandre.chomagerie.network.ConfigSyncPayload;
 import tech.maloandre.chomagerie.network.RefillNotificationPayload;
 import tech.maloandre.chomagerie.util.ShulkerRefillHandler;
@@ -24,6 +25,7 @@ public class Chomagerie implements ModInitializer {
 
         // Initialize server configuration
         ServerConfig.getInstance();
+        ModGameRules.register();
 
         // Register network packet types
         PayloadTypeRegistry.serverboundPlay().register(ConfigSyncPayload.ID, ConfigSyncPayload.CODEC);
