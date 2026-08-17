@@ -1,7 +1,10 @@
 ## Release
 
-### [1.4.7] - 2026-02-03
+### [1.4.8] - 2026-08-17
 
 #### Added
-- Add recipe for the copper and the waxed_copper – bars, chain, chest, golem_statue, lantern
-- GitHub build.yml fix and others
+- Add farmland trampling protection.
+- Add `players_trample_farmland` gamerule to control whether players can trample farmland.
+- Add `mobs_trample_farmland` gamerule to control whether mobs can trample farmland.
+- Add `leather_boots_trample_farmland` gamerule to require leather boots for player farmland trampling when `players_trample_farmland` is enabled.
+- Farmland protection works server-side and does not require clients to install the mod on multiplayer servers.
