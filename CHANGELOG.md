@@ -1,6 +1,6 @@
 ## Release
 
-### [1.4.8] - 2026-08-17
+### [1.4.9] - 2026-08-17
 
 #### Added
 - Add farmland trampling protection.
