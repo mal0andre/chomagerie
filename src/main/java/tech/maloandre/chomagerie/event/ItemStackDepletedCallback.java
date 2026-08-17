@@ -2,9 +2,9 @@ package tech.maloandre.chomagerie.event;
 
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 
 public class ItemStackDepletedCallback {
 
@@ -27,7 +27,7 @@ public class ItemStackDepletedCallback {
          * @param item          L'item qui était dans le slot
          * @param previousStack Le stack précédent (avant qu'il se vide) - contient les données complètes de l'item
          */
-        void onItemStackDepleted(PlayerEntity player, int slot, Item item, ItemStack previousStack);
+        void onItemStackDepleted(Player player, int slot, Item item, ItemStack previousStack);
     }
 }
 

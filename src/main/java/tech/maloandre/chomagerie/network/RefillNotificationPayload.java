@@ -1,21 +1,21 @@
 package tech.maloandre.chomagerie.network;
 
-import net.minecraft.network.PacketByteBuf;
-import net.minecraft.network.codec.PacketCodec;
-import net.minecraft.network.packet.CustomPayload;
-import net.minecraft.util.Identifier;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.resources.Identifier;
 import tech.maloandre.chomagerie.Chomagerie;
 
-public record RefillNotificationPayload(String itemName) implements CustomPayload {
-    public static final Id<RefillNotificationPayload> ID = new Id<>(Identifier.of(Chomagerie.MOD_ID, "refill_notification"));
+public record RefillNotificationPayload(String itemName) implements CustomPacketPayload {
+    public static final Type<RefillNotificationPayload> ID = new Type<>(Identifier.parse(Chomagerie.MOD_ID + ":refill_notification"));
 
-    public static final PacketCodec<PacketByteBuf, RefillNotificationPayload> CODEC = PacketCodec.of(
-            (value, buf) -> buf.writeString(value.itemName),
-            buf -> new RefillNotificationPayload(buf.readString())
+    public static final StreamCodec<RegistryFriendlyByteBuf, RefillNotificationPayload> CODEC = StreamCodec.of(
+            (buf, value) -> buf.writeUtf(value.itemName()),
+            buf -> new RefillNotificationPayload(buf.readUtf())
     );
 
     @Override
-    public Id<? extends CustomPayload> getId() {
+    public Type<? extends CustomPacketPayload> type() {
         return ID;
     }
 }

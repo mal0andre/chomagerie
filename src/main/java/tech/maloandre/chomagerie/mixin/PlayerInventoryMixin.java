@@ -1,12 +1,12 @@
 package tech.maloandre.chomagerie.mixin;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.stat.Stats;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.stats.Stats;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -16,22 +16,24 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import tech.maloandre.chomagerie.event.ItemStackDepletedCallback;
 
-@Mixin(PlayerInventory.class)
+@Mixin(Inventory.class)
 public abstract class PlayerInventoryMixin {
 
     @Shadow
     @Final
-    public PlayerEntity player;
+    public Player player;
+
+    // Surveillance de tous les slots de l'inventaire principal (0-35)
     @Unique
-    private Item chomagerie$lastSelectedItem = null;
+    private static final int MAIN_INVENTORY_SIZE = 36; // Hotbar (0-8) + Inventaire principal (9-35)
     @Unique
-    private ItemStack chomagerie$lastSelectedStack = null;
+    private final Item[] chomagerie$lastItems = new Item[MAIN_INVENTORY_SIZE];
     @Unique
-    private int chomagerie$lastSelectedCount = 0;
+    private final ItemStack[] chomagerie$lastStacks = new ItemStack[MAIN_INVENTORY_SIZE];
     @Unique
-    private int chomagerie$lastSelectedSlot = -1;
+    private final int[] chomagerie$lastCounts = new int[MAIN_INVENTORY_SIZE];
     @Unique
-    private int chomagerie$lastUsedStatValue = 0;
+    private final int[] chomagerie$lastUsedStats = new int[MAIN_INVENTORY_SIZE];
 
     // Surveillance de l'offhand
     @Unique
@@ -43,15 +45,10 @@ public abstract class PlayerInventoryMixin {
     @Unique
     private int chomagerie$lastOffhandUsedStatValue = 0;
 
-    @Shadow
-    public int getSelectedSlot() {
-        return 0; // Stub, sera remplacé par Shadow
-    }
-
     @Unique
     private int chomagerie$getUsedStat(Item item) {
-        if (player instanceof ServerPlayerEntity serverPlayer) {
-            return serverPlayer.getStatHandler().getStat(Stats.USED.getOrCreateStat(item));
+        if (player instanceof ServerPlayer serverPlayer) {
+            return serverPlayer.getStats().getValue(Stats.ITEM_USED.get(item));
         }
         return 0;
     }
@@ -75,116 +72,105 @@ public abstract class PlayerInventoryMixin {
 
 
     /**
-     * Surveille quand un stack se vide COMPLÈTEMENT par utilisation dans le slot sélectionné uniquement
+     * Surveille quand un stack se vide COMPLÈTEMENT par utilisation dans tous les slots de l'inventaire principal
      */
-    @Inject(method = "updateItems", at = @At("HEAD"))
-    private void onUpdateItems(CallbackInfo ci) {
-        if (player == null || player.getEntityWorld().isClient()) {
+    @Inject(method = "tick", at = @At("HEAD"))
+    private void onTick(CallbackInfo ci) {
+        if (player == null || player.level().isClientSide()) {
             return;
         }
 
-        PlayerInventory inventory = (PlayerInventory) (Object) this;
+        Inventory inventory = (Inventory) (Object) this;
 
-        // Surveiller la main principale
-        chomagerie$checkMainHand(inventory);
+        // Surveiller tous les slots de l'inventaire principal (0-35)
+        chomagerie$checkAllMainInventorySlots(inventory);
 
         // Surveiller l'offhand
         chomagerie$checkOffhand(inventory);
     }
 
     /**
-     * Vérifie et surveille la main principale (hotbar slot sélectionné)
+     * Vérifie et surveille tous les slots de l'inventaire principal (hotbar + inventaire principal, slots 0-35)
      */
     @Unique
-    private void chomagerie$checkMainHand(PlayerInventory inventory) {
-        int currentSelectedSlot = getSelectedSlot();
-        ItemStack currentStack = inventory.getStack(currentSelectedSlot);
+    private void chomagerie$checkAllMainInventorySlots(Inventory inventory) {
+        for (int slot = 0; slot < MAIN_INVENTORY_SIZE; slot++) {
+            ItemStack currentStack = inventory.getItem(slot);
+            Item lastItem = chomagerie$lastItems[slot];
+            int lastCount = chomagerie$lastCounts[slot];
+            ItemStack lastStack = chomagerie$lastStacks[slot];
+            int lastUsedStat = chomagerie$lastUsedStats[slot];
 
-        // Si le joueur a changé de slot, réinitialiser la surveillance
-        if (chomagerie$lastSelectedSlot != currentSelectedSlot) {
-            chomagerie$lastSelectedSlot = currentSelectedSlot;
-            chomagerie$lastSelectedItem = currentStack.isEmpty() ? null : currentStack.getItem();
-            chomagerie$lastSelectedStack = currentStack.isEmpty() ? null : currentStack.copy();
-            chomagerie$lastSelectedCount = currentStack.getCount();
-            if (chomagerie$lastSelectedItem != null) {
-                chomagerie$lastUsedStatValue = chomagerie$getUsedStat(chomagerie$lastSelectedItem);
-            } else {
-                chomagerie$lastUsedStatValue = 0;
+            // Cas 1 : On surveillait un item et le slot est maintenant complètement vide
+            if (lastItem != null && currentStack.isEmpty()) {
+                // Vérifier que c'était une consommation naturelle (count passé de 1 à 0)
+                if (lastCount == 1) {
+                    // Vérifier si la statistique USED a augmenté
+                    int currentUsedStat = chomagerie$getUsedStat(lastItem);
+                    if (currentUsedStat > lastUsedStat) {
+                        // Le stack s'est vidé naturellement
+                        ItemStackDepletedCallback.EVENT.invoker().onItemStackDepleted(
+                                player, slot, lastItem, lastStack
+                        );
+                    }
+                }
+                // Réinitialiser la surveillance
+                chomagerie$lastItems[slot] = null;
+                chomagerie$lastStacks[slot] = null;
+                chomagerie$lastCounts[slot] = 0;
+                chomagerie$lastUsedStats[slot] = 0;
             }
-            return; // Ne rien faire d'autre ce tick
-        }
-
-        // Cas 1 : On surveillait un item et le slot est maintenant complètement vide
-        if (chomagerie$lastSelectedItem != null && currentStack.isEmpty()) {
-            // Vérifier que c'était une consommation naturelle (count passé de 1 à 0)
-            // Si le count était > 1, le joueur a probablement déplacé/jeté le stack manuellement
-            if (chomagerie$lastSelectedCount == 1) {
-                // Vérifier si la statistique USED a augmenté (indique une pose de bloc ou une consommation d'item)
-                int currentUsedStat = chomagerie$getUsedStat(chomagerie$lastSelectedItem);
-                if (currentUsedStat > chomagerie$lastUsedStatValue) {
-                    // Le stack s'est vidé naturellement (dernier bloc posé, dernier item consommé, etc.)
+            // Cas 1.5 : On surveillait un seau rempli et maintenant c'est un seau vide (item remplacé)
+            else if (lastItem != null && !currentStack.isEmpty() &&
+                     currentStack.getItem() == Items.BUCKET &&
+                     chomagerie$isFilledBucket(lastItem)) {
+                // Un seau rempli est devenu un seau vide, c'est une utilisation valide
+                int currentUsedStat = chomagerie$getUsedStat(lastItem);
+                if (currentUsedStat > lastUsedStat) {
+                    // Le seau a été utilisé naturellement
                     ItemStackDepletedCallback.EVENT.invoker().onItemStackDepleted(
-                            player, currentSelectedSlot, chomagerie$lastSelectedItem, chomagerie$lastSelectedStack
+                            player, slot, lastItem, lastStack
                     );
                 }
+                // Réinitialiser la surveillance pour le nouveau seau vide
+                chomagerie$lastItems[slot] = Items.BUCKET;
+                chomagerie$lastStacks[slot] = currentStack.copy();
+                chomagerie$lastCounts[slot] = currentStack.getCount();
+                chomagerie$lastUsedStats[slot] = chomagerie$getUsedStat(Items.BUCKET);
             }
-            // Réinitialiser la surveillance
-            chomagerie$lastSelectedItem = null;
-            chomagerie$lastSelectedStack = null;
-            chomagerie$lastSelectedCount = 0;
-            chomagerie$lastUsedStatValue = 0;
-        }
-        // Cas 1.5 : On surveillait un seau rempli et maintenant c'est un seau vide (item remplacé)
-        else if (chomagerie$lastSelectedItem != null && !currentStack.isEmpty() &&
-                 currentStack.getItem() == Items.BUCKET &&
-                 chomagerie$isFilledBucket(chomagerie$lastSelectedItem)) {
-            // Un seau rempli est devenu un seau vide, c'est une utilisation valide
-            int currentUsedStat = chomagerie$getUsedStat(chomagerie$lastSelectedItem);
-            if (currentUsedStat > chomagerie$lastUsedStatValue) {
-                // Le seau a été utilisé naturellement
-                ItemStackDepletedCallback.EVENT.invoker().onItemStackDepleted(
-                        player, currentSelectedSlot, chomagerie$lastSelectedItem, chomagerie$lastSelectedStack
-                );
-            }
-            // Réinitialiser la surveillance pour le nouveau seau vide
-            chomagerie$lastSelectedItem = Items.BUCKET;
-            chomagerie$lastSelectedStack = currentStack.copy();
-            chomagerie$lastSelectedCount = currentStack.getCount();
-            chomagerie$lastUsedStatValue = chomagerie$getUsedStat(Items.BUCKET);
-        }
-        // Cas 2 : On a un item dans le slot sélectionné
-        else if (!currentStack.isEmpty()) {
-            Item currentItem = currentStack.getItem();
-            int currentCount = currentStack.getCount();
+            // Cas 2 : On a un item dans le slot
+            else if (!currentStack.isEmpty()) {
+                Item currentItem = currentStack.getItem();
+                int currentCount = currentStack.getCount();
 
-            // Si c'est le même item qu'avant
-            if (chomagerie$lastSelectedItem == currentItem) {
-                // Mettre à jour uniquement si le count a diminué (utilisation normale)
-                // Si le count a augmenté ou changé drastiquement, c'est une manipulation manuelle
-                if (currentCount < chomagerie$lastSelectedCount) {
-                    chomagerie$lastSelectedCount = currentCount;
-                    chomagerie$lastSelectedStack = currentStack.copy();
-                    chomagerie$lastUsedStatValue = chomagerie$getUsedStat(currentItem);
-                } else if (currentCount > chomagerie$lastSelectedCount) {
-                    // Le count a augmenté (ajout manuel, stack, etc.), on réinitialise
-                    chomagerie$lastSelectedCount = currentCount;
-                    chomagerie$lastSelectedStack = currentStack.copy();
-                    chomagerie$lastUsedStatValue = chomagerie$getUsedStat(currentItem);
+                // Si c'est le même item qu'avant
+                if (lastItem == currentItem) {
+                    // Mettre à jour uniquement si le count a diminué (utilisation normale)
+                    if (currentCount < lastCount) {
+                        chomagerie$lastCounts[slot] = currentCount;
+                        chomagerie$lastStacks[slot] = currentStack.copy();
+                        chomagerie$lastUsedStats[slot] = chomagerie$getUsedStat(currentItem);
+                    } else if (currentCount > lastCount) {
+                        // Le count a augmenté (ajout manuel, stack, etc.), on réinitialise
+                        chomagerie$lastCounts[slot] = currentCount;
+                        chomagerie$lastStacks[slot] = currentStack.copy();
+                        chomagerie$lastUsedStats[slot] = chomagerie$getUsedStat(currentItem);
+                    }
+                }
+                // Si l'item a changé, commencer à surveiller le nouveau
+                else {
+                    chomagerie$lastItems[slot] = currentItem;
+                    chomagerie$lastCounts[slot] = currentCount;
+                    chomagerie$lastStacks[slot] = currentStack.copy();
+                    chomagerie$lastUsedStats[slot] = chomagerie$getUsedStat(currentItem);
                 }
             }
-            // Si l'item a changé, commencer à surveiller le nouveau
+            // Cas 3 : Le slot est vide et on ne surveillait rien
             else {
-                chomagerie$lastSelectedItem = currentItem;
-                chomagerie$lastSelectedCount = currentCount;
-                chomagerie$lastSelectedStack = currentStack.copy();
-                chomagerie$lastUsedStatValue = chomagerie$getUsedStat(currentItem);
+                chomagerie$lastCounts[slot] = 0;
+                chomagerie$lastStacks[slot] = null;
+                chomagerie$lastUsedStats[slot] = 0;
             }
-        }
-        // Cas 3 : Le slot est vide et on ne surveillait rien
-        else {
-            chomagerie$lastSelectedCount = 0;
-            chomagerie$lastSelectedStack = null;
-            chomagerie$lastUsedStatValue = 0;
         }
     }
 
@@ -192,9 +178,9 @@ public abstract class PlayerInventoryMixin {
      * Vérifie et surveille l'offhand (slot 40 dans l'inventaire du joueur)
      */
     @Unique
-    private void chomagerie$checkOffhand(PlayerInventory inventory) {
+    private void chomagerie$checkOffhand(Inventory inventory) {
         final int OFFHAND_SLOT = 40; // Le slot de l'offhand est toujours 40
-        ItemStack currentStack = inventory.getStack(OFFHAND_SLOT);
+        ItemStack currentStack = inventory.getItem(OFFHAND_SLOT);
 
         // Cas 1 : On surveillait un item et le slot est maintenant complètement vide
         if (chomagerie$lastOffhandItem != null && currentStack.isEmpty()) {

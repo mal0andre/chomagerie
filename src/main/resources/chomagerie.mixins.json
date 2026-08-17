@@ -4,6 +4,7 @@
   "package": "tech.maloandre.chomagerie.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
+    "FarmlandBlockMixin",
     "PlayerInventoryMixin"
   ],
   "injectors": {

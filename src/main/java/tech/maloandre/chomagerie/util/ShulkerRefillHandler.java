@@ -1,16 +1,16 @@
 package tech.maloandre.chomagerie.util;
 
-import net.minecraft.block.ShulkerBoxBlock;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.ContainerComponent;
-import net.minecraft.entity.ItemEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.Container;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.ItemContainerContents;
+import net.minecraft.world.level.block.ShulkerBoxBlock;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,7 +45,7 @@ public class ShulkerRefillHandler {
 
 		// Compare all data components to ensure we're matching exactly the same item
 		// This is crucial for items like fireworks with different flight duration levels
-		return stack1.getComponentChanges().equals(stack2.getComponentChanges());
+		return stack1.getComponentsPatch().equals(stack2.getComponentsPatch());
 	}
 
 	/**
@@ -55,9 +55,9 @@ public class ShulkerRefillHandler {
 	 * @param itemToCheck The item to search for
 	 * @return true if the item is present in the main inventory
 	 */
-	private static boolean hasItemInMainInventory(Inventory inventory, ItemStack itemToCheck) {
-		for (int i = 0; i < inventory.size(); i++) {
-			ItemStack stack = inventory.getStack(i);
+	private static boolean hasItemInMainInventory(Container inventory, ItemStack itemToCheck) {
+		for (int i = 0; i < inventory.getContainerSize(); i++) {
+			ItemStack stack = inventory.getItem(i);
 
 			// Ignore shulker boxes
 			if (isShulkerBox(stack.getItem())) {
@@ -84,18 +84,18 @@ public class ShulkerRefillHandler {
 	 * @param nameFilter      The name to search for (ignored if filterByName is false)
 	 * @return true if an item was found and extracted
 	 */
-	private static boolean tryRefillFromInventoryShulkers(PlayerEntity player, Inventory sourceInventory, Inventory targetInventory,
+	private static boolean tryRefillFromInventoryShulkers(Player player, Container sourceInventory, Container targetInventory,
 														  int targetSlot, ItemStack itemToRefill,
 														  boolean filterByName, String nameFilter) {
 		// Search the inventory for shulker boxes
-		for (int i = 0; i < sourceInventory.size(); i++) {
-			ItemStack stack = sourceInventory.getStack(i);
+		for (int i = 0; i < sourceInventory.getContainerSize(); i++) {
+			ItemStack stack = sourceInventory.getItem(i);
 
 			if (isShulkerBox(stack.getItem())) {
 				// If name filtering is enabled, check the name of the shulker
 				if (filterByName) {
 					// Get the name of the shulker box
-					String shulkerName = stack.getName().getString();
+					String shulkerName = stack.getHoverName().getString();
 
 					// If the shulker has no name or if the name doesn't match, ignore it
 					if (shulkerName == null || !shulkerName.equals(nameFilter)) {
@@ -104,11 +104,11 @@ public class ShulkerRefillHandler {
 				}
 
 				// Check the contents of the shulker box
-				ContainerComponent container = stack.getOrDefault(DataComponentTypes.CONTAINER, ContainerComponent.DEFAULT);
+				ItemContainerContents container = stack.getOrDefault(DataComponents.CONTAINER, ItemContainerContents.EMPTY);
 
 				// Convert the stream to a list
 				List<ItemStack> contents = new ArrayList<>();
-				container.stream().forEach(contents::add);
+				container.allItemsCopyStream().forEach(contents::add);
 
 				if (contents.isEmpty()) {
 					continue;
@@ -120,16 +120,16 @@ public class ShulkerRefillHandler {
 
 					if (isSameItemType(shulkerItem, itemToRefill)) {
 						// Found the item! Transfer it to the empty slot
-						int amountToTake = Math.min(shulkerItem.getCount(), itemToRefill.getItem().getMaxCount());
+						int amountToTake = Math.min(shulkerItem.getCount(), itemToRefill.getMaxStackSize());
 
 						ItemStack refillStack = shulkerItem.copy();
 						refillStack.setCount(amountToTake);
 
 						// IMPORTANT: Save the current item in the slot (e.g., empty bucket) before replacing it
-						ItemStack oldStack = targetInventory.getStack(targetSlot).copy();
+						ItemStack oldStack = targetInventory.getItem(targetSlot).copy();
 
 						// First, put the new item in the target slot
-						targetInventory.setStack(targetSlot, refillStack);
+						targetInventory.setItem(targetSlot, refillStack);
 
 						// Now try to add the old item (empty bucket) back to the player's inventory
 						if (!oldStack.isEmpty()) {
@@ -137,22 +137,22 @@ public class ShulkerRefillHandler {
 
 							// Try to insert the item in the inventory
 							// Since targetSlot is now occupied by the new item, insertStack won't use it
-							boolean fullyInserted = player.getInventory().insertStack(oldStack);
+							boolean fullyInserted = player.getInventory().add(oldStack);
 
 
 							// If insertStack returned false OR if there are still items left, drop them
 							if (!fullyInserted || !oldStack.isEmpty()) {
 
 								// Drop the remaining items in the world
-								if (!player.getEntityWorld().isClient() && player.getEntityWorld() instanceof ServerWorld serverWorld) {
+								if (!player.level().isClientSide() && player.level() instanceof ServerLevel serverWorld) {
 									// Get player's eye position
-									double eyeHeight = player.getStandingEyeHeight();
+									double eyeHeight = player.getEyeHeight();
 									double x = player.getX();
 									double y = player.getY() + eyeHeight;
 									double z = player.getZ();
 
 									// Get player's look direction
-									Vec3d lookVec = player.getRotationVector().multiply(0.3);
+									Vec3 lookVec = player.getViewVector(1.0F).multiply(0.3, 0.3, 0.3);
 
 									// Create the item entity
 									ItemEntity itemEntity = new ItemEntity(
@@ -164,10 +164,10 @@ public class ShulkerRefillHandler {
 									);
 
 									// Set velocity to throw the item forward
-									itemEntity.setVelocity(lookVec.x, 0.2, lookVec.z);
+									itemEntity.setDeltaMovement(lookVec.x, 0.2, lookVec.z);
 
 									// Set pickup delay so the item can't be immediately picked up
-									itemEntity.setPickupDelay(40);
+									itemEntity.setPickUpDelay(40);
 
 									// Set the thrower to prevent immediate pickup
 									itemEntity.setThrower(player);
@@ -176,7 +176,7 @@ public class ShulkerRefillHandler {
 						}
 
 						// Remove the item from the shulker box
-						shulkerItem.decrement(amountToTake);
+						shulkerItem.shrink(amountToTake);
 
 						// Create a new container with the modified contents
 						List<ItemStack> newContents = new ArrayList<>();
@@ -192,9 +192,9 @@ public class ShulkerRefillHandler {
 						}
 
 						// Update the shulker box with the new contents
-						stack.set(DataComponentTypes.CONTAINER, ContainerComponent.fromStacks(newContents));
-						sourceInventory.markDirty();
-						targetInventory.markDirty();
+						stack.set(DataComponents.CONTAINER, ItemContainerContents.fromItems(newContents));
+						sourceInventory.setChanged();
+						targetInventory.setChanged();
 
 						return true; // Refill completed
 					}
@@ -214,25 +214,25 @@ public class ShulkerRefillHandler {
 	 * @param nameFilter   The name to search for (ignored if filterByName is false)
 	 * @return RefillResult containing success status and item name
 	 */
-	public static RefillResult tryRefillFromShulker(PlayerEntity player, int emptySlot, ItemStack itemToRefill,
+	public static RefillResult tryRefillFromShulker(Player player, int emptySlot, ItemStack itemToRefill,
 													boolean filterByName, String nameFilter) {
 		// Check if itemToRefill is null
 		if (itemToRefill == null) {
 			return new RefillResult(false, ""); // Nothing to refill
 		}
 
-		if (player.getEntityWorld().isClient()) {
+		if (player.level().isClientSide()) {
 			return new RefillResult(false, ""); // Only works server-side
 		}
 
-		Inventory inventory = player.getInventory();
+		Container inventory = player.getInventory();
 
 		// Check if the player already has the item in their main inventory
 		if (hasItemInMainInventory(inventory, itemToRefill)) {
 			return new RefillResult(false, ""); // Don't refill if the item is already present elsewhere in inventory
 		}
 
-		String itemName = itemToRefill.getName().getString();
+		String itemName = itemToRefill.getHoverName().getString();
 
 		// 1. Try first in the main inventory
 		if (tryRefillFromInventoryShulkers(player, inventory, inventory, emptySlot, itemToRefill, filterByName, nameFilter)) {
@@ -240,7 +240,7 @@ public class ShulkerRefillHandler {
 		}
 
 		// 2. If nothing found, search in the ender chest
-		Inventory enderChest = player.getEnderChestInventory();
+		Container enderChest = player.getEnderChestInventory();
 		boolean success = tryRefillFromInventoryShulkers(player, enderChest, inventory, emptySlot, itemToRefill, filterByName, nameFilter);
 		return new RefillResult(success, success ? itemName : "");
 	}
