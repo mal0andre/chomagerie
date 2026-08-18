@@ -2,21 +2,26 @@ package tech.maloandre.chomagerie.network;
 
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.Identifier;
+import net.minecraft.server.ServerScoreboard;
 import net.minecraft.server.level.ServerPlayer;
 import tech.maloandre.chomagerie.Chomagerie;
+import tech.maloandre.chomagerie.command.ChomagerieTeamCommand;
 import tech.maloandre.chomagerie.config.ServerConfig;
 
 /**
- * Paquet pour synchroniser la configuration du client vers le serveur
+ * Paquet pour synchroniser la configuration du client vers le serveur.
  */
 public record ConfigSyncPayload(
         boolean shulkerRefillEnabled,
         boolean showRefillMessages,
         boolean filterByName,
-        String shulkerNameFilter
+        String shulkerNameFilter,
+        boolean teamTagEnabled,
+        String teamTag
 ) implements CustomPacketPayload {
 
     public static final CustomPacketPayload.Type<ConfigSyncPayload> ID =
@@ -28,36 +33,52 @@ public record ConfigSyncPayload(
                 buf.writeBoolean(value.showRefillMessages());
                 buf.writeBoolean(value.filterByName());
                 buf.writeUtf(value.shulkerNameFilter());
+                buf.writeBoolean(value.teamTagEnabled());
+                buf.writeUtf(value.teamTag());
             },
             (buf) -> new ConfigSyncPayload(
                     buf.readBoolean(),
                     buf.readBoolean(),
+                    buf.readBoolean(),
+                    buf.readUtf(),
                     buf.readBoolean(),
                     buf.readUtf()
             )
     );
 
     /**
-     * Enregistre le handler côté serveur
+     * Enregistre le handler cote serveur.
      */
     public static void registerServerHandler() {
         ServerPlayNetworking.registerGlobalReceiver(ID, (payload, context) -> {
             ServerPlayer player = context.player();
-
-            // Mettre à jour la configuration du joueur côté serveur
             ServerConfig config = ServerConfig.getInstance();
 
-            // Marquer que le joueur a le mod installé
             config.setPlayerHasMod(player.getUUID(), true);
-
-            // Appliquer sa configuration
             config.setShulkerRefillEnabled(player.getUUID(), payload.shulkerRefillEnabled);
             config.setShowRefillMessages(player.getUUID(), payload.showRefillMessages);
             config.setFilterByName(player.getUUID(), payload.filterByName);
             config.setShulkerNameFilter(player.getUUID(), payload.shulkerNameFilter);
+            config.setTeamTagEnabled(player.getUUID(), payload.teamTagEnabled);
+            config.setTeamTag(player.getUUID(), payload.teamTag);
 
-            Chomagerie.LOGGER.info("Configuration synchronisée pour le joueur {} - ShulkerRefill: {}, Filtre: {} (Mod installé)",
-                    player.getName().getString(), payload.shulkerRefillEnabled, payload.filterByName ? payload.shulkerNameFilter : "désactivé");
+            ServerScoreboard scoreboard = player.level().getServer().getScoreboard();
+            if (payload.teamTagEnabled) {
+                try {
+                    ChomagerieTeamCommand.applyTeamTag(scoreboard, player, payload.teamTag);
+                } catch (Exception e) {
+                    ChomagerieTeamCommand.clearTeamTag(scoreboard, player);
+                    player.sendSystemMessage(Component.literal("[Chomagerie] Tag invalide: " + e.getMessage()));
+                }
+            } else {
+                ChomagerieTeamCommand.clearTeamTag(scoreboard, player);
+            }
+
+            Chomagerie.LOGGER.info("Configuration synchronisee pour le joueur {} - ShulkerRefill: {}, Filtre: {}, TeamTag: {} (Mod installe)",
+                    player.getName().getString(),
+                    payload.shulkerRefillEnabled,
+                    payload.filterByName ? payload.shulkerNameFilter : "desactive",
+                    payload.teamTagEnabled ? payload.teamTag : "desactive");
         });
     }
 
@@ -66,4 +87,3 @@ public record ConfigSyncPayload(
         return ID;
     }
 }
-

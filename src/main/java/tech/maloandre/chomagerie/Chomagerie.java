@@ -1,17 +1,21 @@
 package tech.maloandre.chomagerie;
 
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.server.level.ServerPlayer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import tech.maloandre.chomagerie.command.ChomagerieTeamCommand;
 import tech.maloandre.chomagerie.config.ServerConfig;
 import tech.maloandre.chomagerie.event.ItemStackDepletedCallback;
 import tech.maloandre.chomagerie.gamerule.ModGameRules;
 import tech.maloandre.chomagerie.network.ConfigSyncPayload;
 import tech.maloandre.chomagerie.network.RefillNotificationPayload;
+import tech.maloandre.chomagerie.network.TeamManageRequestPayload;
+import tech.maloandre.chomagerie.network.TeamManageSyncPayload;
 import tech.maloandre.chomagerie.util.ShulkerRefillHandler;
 
 public class Chomagerie implements ModInitializer {
@@ -29,10 +33,16 @@ public class Chomagerie implements ModInitializer {
 
         // Register network packet types
         PayloadTypeRegistry.serverboundPlay().register(ConfigSyncPayload.ID, ConfigSyncPayload.CODEC);
+        PayloadTypeRegistry.serverboundPlay().register(TeamManageRequestPayload.ID, TeamManageRequestPayload.CODEC);
         PayloadTypeRegistry.clientboundPlay().register(RefillNotificationPayload.ID, RefillNotificationPayload.CODEC);
+        PayloadTypeRegistry.clientboundPlay().register(TeamManageSyncPayload.ID, TeamManageSyncPayload.CODEC);
 
         // Register server-side network handler
         ConfigSyncPayload.registerServerHandler();
+        TeamManageRequestPayload.registerServerHandler();
+
+        CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) ->
+                ChomagerieTeamCommand.register(dispatcher));
 
         // Detect when players connect
         ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> {
