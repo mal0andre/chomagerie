@@ -1,30 +1,30 @@
 # Chomagerie 🧀
 
-Chomagerie ajoute des conforts de jeu pour rendre le serveur plus fluide au quotidien : recharge automatique depuis les shulkers, tags colores devant les pseudos, recettes pratiques et protection des cultures.
+Chomagerie adds quality-of-life features to make everyday gameplay on the server smoother: automatic refills from shulker boxes, colored tags before player names, useful recipes, and crop protection.
 
-## Fonctionnalites ✨
+## Features ✨
 
-### Recharge automatique depuis les shulkers 📦
+### Automatic Shulker Refill 📦
 
-Quand tu utilises entierement un stack, Chomagerie peut le remplacer automatiquement par le meme item trouve dans tes shulkers.
+When you completely use up a stack, Chomagerie can automatically replace it with the same item found inside your shulker boxes.
 
-- Fonctionne pendant que tu joues, sans ouvrir de menu.
-- Garde l'item dans le meme slot.
-- Cherche dans ton inventaire puis dans ton ender chest.
-- Peut afficher un message et jouer un son quand un refill se fait.
-- Peut utiliser seulement les shulkers avec un nom precis, par exemple un shulker de restock.
+* Works while you play, without opening any menu.
+* Keeps the item in the same inventory slot.
+* Searches your inventory first, then your Ender Chest.
+* Can display a message and play a sound when a refill happens.
+* Can be configured to only use shulker boxes with a specific name, for example a dedicated restock shulker.
 
-### Tags de joueur 🎨
+### Player Tags 🎨
 
-Tu peux afficher un petit tag colore avant ton pseudo.
+You can display a small colored tag before your username.
 
-- Le tag apparait sans crochets.
-- La couleur de ton pseudo reste normale.
-- Tu peux colorer chaque lettre avec les codes Minecraft `&`.
-- Tu peux faire des gradients.
-- Tu peux changer ou retirer ton tag quand tu veux.
+* The tag is displayed without brackets.
+* Your username keeps its normal color.
+* Each letter can be colored individually using Minecraft `&` color codes.
+* Gradients are supported.
+* You can change or remove your tag whenever you want.
 
-Exemples :
+Examples:
 
 ```mcfunction
 /chomteam set &2Narko&6tiqu
@@ -33,19 +33,19 @@ Exemples :
 /chomteam status
 ```
 
-Tu peux aussi utiliser `/teamtag` a la place de `/chomteam`.
+You can also use `/teamtag` instead of `/chomteam`.
 
-### Gestion des teams 🛡️
+### Team Management 🛡️
 
-Les operateurs peuvent gerer les teams du serveur avec des commandes.
+Server operators can manage server teams using commands.
 
-- Voir les teams existantes.
-- Creer ou supprimer une team.
-- Changer le nom affiche, le prefixe ou le suffixe.
-- L'autocompletion propose les noms affiches des teams.
-- Les couleurs `&` et les gradients fonctionnent aussi sur les textes de team.
+* View existing teams.
+* Create or remove a team.
+* Change the display name, prefix, or suffix.
+* Command autocomplete suggests team display names.
+* `&` colors and gradients are also supported for team text.
 
-Exemples :
+Examples:
 
 ```mcfunction
 /chomteam manage list
@@ -55,44 +55,44 @@ Exemples :
 /chomteam manage prefix "Staff" <gradient:#977272:#E32B2B>Staff
 ```
 
-### Protection des cultures 🌾
+### Crop Protection 🌾
 
-Le serveur peut controler quand les terres cultivees peuvent etre pietinees.
+The server can control when farmland can be trampled.
 
-- Bloquer le pietinement par les joueurs.
-- Bloquer le pietinement par les mobs.
-- Autoriser le pietinement seulement avec des bottes en cuir, selon la configuration du serveur.
+* Prevent players from trampling farmland.
+* Prevent mobs from trampling farmland.
+* Allow trampling only when wearing leather boots, depending on the server configuration.
 
-### Recettes pratiques 🔨
+### Useful Recipes 🔨
 
-Chomagerie ajoute aussi des recettes utiles pour simplifier certains crafts du serveur.
+Chomagerie also adds useful recipes to simplify certain crafting processes on the server.
 
-- Recettes de stonecutter.
-- Conversions de coraux.
-- Recettes utilitaires.
-- Recettes autour du cuivre.
-- Quelques ajustements de recettes vanilla.
+* Stonecutter recipes.
+* Coral conversions.
+* Utility recipes.
+* Copper-related recipes.
+* A few adjustments to vanilla recipes.
 
-## Configuration en jeu ⚙️
+## In-Game Configuration ⚙️
 
-Avec ModMenu, tu peux regler :
+Using ModMenu, you can configure:
 
-- ShulkerRefill
-- Team Tag
+* ShulkerRefill
+* Team Tag
 
-La gestion avancee des teams se fait uniquement avec les commandes operateur.
+Advanced team management is only available through operator commands.
 
 ## Installation 🚀
 
-Le mod est prevu pour Fabric.
+The mod is designed for Fabric.
 
-- Les joueurs doivent installer le mod pour utiliser ShulkerRefill et la configuration personnelle.
-- Certaines fonctions serveur, comme la protection des cultures, peuvent fonctionner sans installation cote client.
-- ModMenu est optionnel, mais recommande pour regler facilement les options.
+* Players must install the mod to use ShulkerRefill and personal configuration options.
+* Some server-side features, such as crop protection, can work without the mod being installed on the client.
+* ModMenu is optional, but recommended for easily configuring the available options.
 
 ## License 📜
 
 All Rights Reserved.
 
-- Utilisation en modpack autorisee avec attribution.
-- Redistribution, modification ou reutilisation non autorisee hors permission explicite.
+* Use in modpacks is allowed with attribution.
+* Redistribution, modification, or reuse is not allowed without explicit permission.
