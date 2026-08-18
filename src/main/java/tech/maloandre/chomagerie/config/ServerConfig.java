@@ -160,6 +160,44 @@ public class ServerConfig {
         return getPlayerConfig(playerUuid).shulkerNameFilter;
     }
 
+    public void setTeamTagEnabled(UUID playerUuid, boolean enabled) {
+        PlayerConfig config = getPlayerConfig(playerUuid);
+        config.teamTagEnabled = enabled;
+        setPlayerConfig(playerUuid, config);
+    }
+
+    public boolean isTeamTagEnabled(UUID playerUuid) {
+        return getPlayerConfig(playerUuid).teamTagEnabled;
+    }
+
+    public void setTeamTag(UUID playerUuid, String tag) {
+        PlayerConfig config = getPlayerConfig(playerUuid);
+        config.teamTag = tag;
+        setPlayerConfig(playerUuid, config);
+    }
+
+    public String getTeamTag(UUID playerUuid) {
+        return getPlayerConfig(playerUuid).teamTag;
+    }
+
+    public void setTeamTagIdentity(UUID playerUuid, String playerName, String teamName) {
+        PlayerConfig config = getPlayerConfig(playerUuid);
+        config.teamTagPlayerName = playerName;
+        config.teamTagTeamName = teamName;
+        setPlayerConfig(playerUuid, config);
+    }
+
+    public void clearTeamTagIdentity(UUID playerUuid) {
+        PlayerConfig config = getPlayerConfig(playerUuid);
+        config.teamTagPlayerName = "";
+        config.teamTagTeamName = "";
+        setPlayerConfig(playerUuid, config);
+    }
+
+    public String getTeamTagPlayerName(UUID playerUuid) {
+        return getPlayerConfig(playerUuid).teamTagPlayerName;
+    }
+
     /**
      * Configuration individuelle d'un joueur
      */
@@ -169,6 +207,10 @@ public class ServerConfig {
         public boolean showRefillMessages = true;
         public boolean filterByName = false;
         public String shulkerNameFilter = "restock same";
+        public boolean teamTagEnabled = false;
+        public String teamTag = "";
+        public String teamTagPlayerName = "";
+        public String teamTagTeamName = "";
 
         public PlayerConfig() {
         }

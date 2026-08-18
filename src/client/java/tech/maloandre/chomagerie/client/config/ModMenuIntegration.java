@@ -87,6 +87,85 @@ public class ModMenuIntegration implements ModMenuApi {
                     })
                     .build());
 
+            ConfigCategory teamTagCategory = builder.getOrCreateCategory(Component.literal("Team Tag"));
+
+            teamTagCategory.addEntry(entryBuilder.startBooleanToggle(
+                            Component.literal("Enable Team Tag"),
+                            config.teamTag.isEnabled()
+                    )
+                    .setDefaultValue(false)
+                    .setTooltip(Component.literal("Displays your tag before your name using Minecraft scoreboard teams"))
+                    .setSaveConsumer(newValue -> {
+                        config.teamTag.setEnabled(newValue);
+                    })
+                    .build());
+
+            teamTagCategory.addEntry(entryBuilder.startStrField(
+                            Component.literal("Tag"),
+                            config.teamTag.getTag()
+                    )
+                    .setDefaultValue("")
+                    .setTooltip(Component.literal("Use Minecraft color codes with &: &2Mal&6o. Maximum 16 visible characters, color codes not counted."))
+                    .setSaveConsumer(newValue -> {
+                        config.teamTag.setTag(newValue);
+                    })
+                    .build());
+
+            teamTagCategory.addEntry(entryBuilder.startEnumSelector(
+                            Component.literal("Color Mode"),
+                            ChomagerieConfig.ColorMode.class,
+                            config.teamTag.getColorMode()
+                    )
+                    .setDefaultValue(ChomagerieConfig.ColorMode.MANUAL)
+                    .setEnumNameProvider(value -> Component.literal(((ChomagerieConfig.ColorMode) value).getLabel()))
+                    .setTooltip(
+                            Component.literal("Manual keeps the codes you type."),
+                            Component.literal("Selected color applies one Minecraft color to the whole tag."),
+                            Component.literal("Gradient blends between two hex colors across the tag."),
+                            Component.literal("Rainbow applies a different color to each character.")
+                    )
+                    .setSaveConsumer(newValue -> {
+                        config.teamTag.setColorMode(newValue);
+                    })
+                    .build());
+
+            teamTagCategory.addEntry(entryBuilder.startEnumSelector(
+                            Component.literal("Minecraft Color"),
+                            ChomagerieConfig.MinecraftColor.class,
+                            config.teamTag.getSelectedColor()
+                    )
+                    .setDefaultValue(ChomagerieConfig.MinecraftColor.AQUA)
+                    .setEnumNameProvider(value -> {
+                        ChomagerieConfig.MinecraftColor color = (ChomagerieConfig.MinecraftColor) value;
+                        return Component.literal(color.getCode() + " " + color.getLabel());
+                    })
+                    .setTooltip(Component.literal("Used when Color Mode is set to Selected color."))
+                    .setSaveConsumer(newValue -> {
+                        config.teamTag.setSelectedColor(newValue);
+                    })
+                    .build());
+
+            teamTagCategory.addEntry(entryBuilder.startColorField(
+                            Component.literal("Gradient Start"),
+                            ChomagerieConfig.TeamTagConfig.parseHexColor(config.teamTag.getGradientStartColor(), 0x977272)
+                    )
+                    .setDefaultValue(0x977272)
+                    .setTooltip(Component.literal("Used when Color Mode is set to Gradient. Example: #977272"))
+                    .setSaveConsumer(config.teamTag::setGradientStartColor)
+                    .build());
+
+            teamTagCategory.addEntry(entryBuilder.startColorField(
+                            Component.literal("Gradient End"),
+                            ChomagerieConfig.TeamTagConfig.parseHexColor(config.teamTag.getGradientEndColor(), 0xE32B2B)
+                    )
+                    .setDefaultValue(0xE32B2B)
+                    .setTooltip(Component.literal("Used when Color Mode is set to Gradient. Example: #E32B2B"))
+                    .setSaveConsumer(config.teamTag::setGradientEndColor)
+                    .build());
+
+            teamTagCategory.addEntry(entryBuilder.startTextDescription(
+                    Component.literal("Gradient preview: " + config.teamTag.getGradientStartColor() + " -> " + config.teamTag.getGradientEndColor())
+            ).build());
 
             builder.setSavingRunnable(() -> {
                 config.save();

@@ -8,11 +8,45 @@ import net.minecraft.sounds.SoundSource;
 import tech.maloandre.chomagerie.client.config.ChomagerieConfig;
 import tech.maloandre.chomagerie.network.ConfigSyncPayload;
 import tech.maloandre.chomagerie.network.RefillNotificationPayload;
+import tech.maloandre.chomagerie.network.TeamManageRequestPayload;
+import tech.maloandre.chomagerie.network.TeamManageSyncPayload;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Client-side network handler
  */
 public class ClientNetworkHandler {
+    private static List<TeamManageSyncPayload.TeamInfo> serverTeams = new ArrayList<>();
+
+    public static List<TeamManageSyncPayload.TeamInfo> getServerTeams() {
+        return List.copyOf(serverTeams);
+    }
+
+    public static boolean canManageServerTeams() {
+        return ClientPlayNetworking.canSend(TeamManageRequestPayload.ID);
+    }
+
+    public static void requestServerTeams() {
+        if (!canManageServerTeams()) {
+            serverTeams = new ArrayList<>();
+            return;
+        }
+
+        ClientPlayNetworking.send(new TeamManageRequestPayload(TeamManageRequestPayload.Action.LIST, "", ""));
+    }
+
+    public static void sendTeamManagementAction(TeamManageRequestPayload.Action action, String teamName, String value) {
+        if (!canManageServerTeams()) {
+            return;
+        }
+        ClientPlayNetworking.send(new TeamManageRequestPayload(action, safe(teamName), safe(value)));
+    }
+
+    private static String safe(String value) {
+        return value == null ? "" : value.trim();
+    }
 
     /**
      * Sends client configuration to server
@@ -27,16 +61,23 @@ public class ClientNetworkHandler {
                 config.shulkerRefill.isEnabled(),
                 config.shulkerRefill.shouldShowRefillMessages(),
                 config.shulkerRefill.isFilterByNameEnabled(),
-                config.shulkerRefill.getShulkerNameFilter()
+                config.shulkerRefill.getShulkerNameFilter(),
+                config.teamTag.isEnabled(),
+                config.teamTag.getFormattedTag()
         );
 
         ClientPlayNetworking.send(payload);
+        requestServerTeams();
     }
 
     /**
      * Initializes network handlers on client side
      */
     public static void init() {
+        ClientPlayNetworking.registerGlobalReceiver(TeamManageSyncPayload.ID, (payload, context) -> {
+            context.client().execute(() -> serverTeams = new ArrayList<>(payload.teams()));
+        });
+
         // Handler for refill notifications
         ClientPlayNetworking.registerGlobalReceiver(RefillNotificationPayload.ID, (payload, context) -> {
             context.client().execute(() -> {
