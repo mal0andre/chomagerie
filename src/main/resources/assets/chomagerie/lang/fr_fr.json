@@ -1,4 +1,24 @@
 {
   "key.chomagerie.category": "Chomagerie",
-  "key.chomagerie.open_config": "Ouvrir la configuration"
+  "key.chomagerie.open_config": "Ouvrir la configuration",
+  "chomagerie.gui.title.configs": "Configuration Chomagerie",
+  "chomagerie.config.tab.all": "Tout",
+  "chomagerie.config.tab.shulker_refill": "ShulkerRefill",
+  "chomagerie.config.tab.team_tag": "Team Tag",
+  "chomagerie.config.section.shulker_refill": "ShulkerRefill",
+  "chomagerie.config.shulker_refill.show_messages": "Afficher les messages",
+  "chomagerie.config.shulker_refill.enabled": "Activer ShulkerRefill",
+  "chomagerie.config.shulker_refill.play_sounds": "Jouer les sons",
+  "chomagerie.config.shulker_refill.filter_by_name": "Filtrer par nom de shulker",
+  "chomagerie.config.shulker_refill.filter_by_name.comment": "Utilise seulement les shulker boxes avec un des noms configures pour le refill",
+  "chomagerie.config.shulker_refill.shulker_name": "Nom de la shulker box",
+  "chomagerie.config.shulker_refill.shulker_names": "Noms des shulker boxes",
+  "chomagerie.config.shulker_refill.shulker_name.comment": "Seules les shulker boxes avec un de ces noms exacts seront utilisees pour le refill",
+  "chomagerie.config.section.team_tag": "Team Tag",
+  "chomagerie.config.team_tag.enabled": "Activer Team Tag",
+  "chomagerie.config.team_tag.tag": "Tag",
+  "chomagerie.config.team_tag.color_mode": "Mode couleur",
+  "chomagerie.config.team_tag.minecraft_color": "Couleur Minecraft",
+  "chomagerie.config.team_tag.gradient_colors": "Couleurs du gradient",
+  "chomagerie.config.team_tag.gradient_colors.comment": "Utilise en mode Gradient. Ajoute au moins deux couleurs hexadecimales, par exemple #977272 et #E32B2B. Plus de couleurs creent plusieurs etapes de gradient."
 }

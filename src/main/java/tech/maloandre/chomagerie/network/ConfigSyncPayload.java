@@ -12,6 +12,9 @@ import tech.maloandre.chomagerie.Chomagerie;
 import tech.maloandre.chomagerie.command.ChomagerieTeamCommand;
 import tech.maloandre.chomagerie.config.ServerConfig;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Paquet pour synchroniser la configuration du client vers le serveur.
  */
@@ -19,7 +22,7 @@ public record ConfigSyncPayload(
         boolean shulkerRefillEnabled,
         boolean showRefillMessages,
         boolean filterByName,
-        String shulkerNameFilter,
+        List<String> shulkerNameFilters,
         boolean teamTagEnabled,
         String teamTag
 ) implements CustomPacketPayload {
@@ -32,18 +35,31 @@ public record ConfigSyncPayload(
                 buf.writeBoolean(value.shulkerRefillEnabled());
                 buf.writeBoolean(value.showRefillMessages());
                 buf.writeBoolean(value.filterByName());
-                buf.writeUtf(value.shulkerNameFilter());
+                buf.writeVarInt(value.shulkerNameFilters().size());
+                for (String filter : value.shulkerNameFilters()) {
+                    buf.writeUtf(filter);
+                }
                 buf.writeBoolean(value.teamTagEnabled());
                 buf.writeUtf(value.teamTag());
             },
-            (buf) -> new ConfigSyncPayload(
-                    buf.readBoolean(),
-                    buf.readBoolean(),
-                    buf.readBoolean(),
-                    buf.readUtf(),
-                    buf.readBoolean(),
-                    buf.readUtf()
-            )
+            (buf) -> {
+                boolean shulkerRefillEnabled = buf.readBoolean();
+                boolean showRefillMessages = buf.readBoolean();
+                boolean filterByName = buf.readBoolean();
+                int filterCount = buf.readVarInt();
+                List<String> shulkerNameFilters = new ArrayList<>();
+                for (int i = 0; i < filterCount; i++) {
+                    shulkerNameFilters.add(buf.readUtf());
+                }
+                return new ConfigSyncPayload(
+                        shulkerRefillEnabled,
+                        showRefillMessages,
+                        filterByName,
+                        shulkerNameFilters,
+                        buf.readBoolean(),
+                        buf.readUtf()
+                );
+            }
     );
 
     /**
@@ -58,7 +74,7 @@ public record ConfigSyncPayload(
             config.setShulkerRefillEnabled(player.getUUID(), payload.shulkerRefillEnabled);
             config.setShowRefillMessages(player.getUUID(), payload.showRefillMessages);
             config.setFilterByName(player.getUUID(), payload.filterByName);
-            config.setShulkerNameFilter(player.getUUID(), payload.shulkerNameFilter);
+            config.setShulkerNameFilters(player.getUUID(), payload.shulkerNameFilters);
             config.setTeamTagEnabled(player.getUUID(), payload.teamTagEnabled);
             config.setTeamTag(player.getUUID(), payload.teamTag);
 
@@ -77,7 +93,7 @@ public record ConfigSyncPayload(
             Chomagerie.LOGGER.info("Configuration synchronisee pour le joueur {} - ShulkerRefill: {}, Filtre: {}, TeamTag: {} (Mod installe)",
                     player.getName().getString(),
                     payload.shulkerRefillEnabled,
-                    payload.filterByName ? payload.shulkerNameFilter : "desactive",
+                    payload.filterByName ? String.join(", ", payload.shulkerNameFilters) : "desactive",
                     payload.teamTagEnabled ? payload.teamTag : "desactive");
         });
     }

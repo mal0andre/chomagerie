@@ -50,16 +50,7 @@ repositories {
         url = "https://maven.terraformersmc.com/releases"
     }
 
-    // Shedaniel Maven pour Cloth Config avec fallback
-    maven {
-        url = "https://maven.shedaniel.me/"
-        content {
-            includeGroup "me.shedaniel.cloth"
-            includeGroup "me.shedaniel"
-        }
-    }
-
-    // Fallback: Modrinth Maven (peut héberger des versions de Cloth Config)
+    // Modrinth Maven
     maven {
         url = "https://api.modrinth.com/maven"
     }
@@ -90,10 +81,8 @@ dependencies {
     // ModMenu - compile only so it's not required at runtime
     compileOnly "com.terraformersmc:modmenu:${project.modmenu_version}"
 
-    // Cloth Config
-    implementation("me.shedaniel.cloth:cloth-config-fabric:26.2.155") {
-        exclude(group: "net.fabricmc.fabric-api")
-    }
+    // MaLiLib - configuration GUI
+    implementation "maven.modrinth:malilib:0.29.3"
 }
 
 processResources {

@@ -8,7 +8,9 @@ import net.fabricmc.loader.api.FabricLoader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -67,7 +69,9 @@ public class ServerConfig {
      */
     public PlayerConfig getPlayerConfig(UUID playerUuid) {
         String uuidString = playerUuid.toString();
-        return playerConfigs.computeIfAbsent(uuidString, k -> new PlayerConfig());
+        PlayerConfig config = playerConfigs.computeIfAbsent(uuidString, k -> new PlayerConfig());
+        config.ensureDefaults();
+        return config;
     }
 
     /**
@@ -148,8 +152,12 @@ public class ServerConfig {
      * Définit le nom de filtre pour les shulker boxes d'un joueur
      */
     public void setShulkerNameFilter(UUID playerUuid, String filter) {
+        setShulkerNameFilters(playerUuid, List.of(filter == null ? "" : filter));
+    }
+
+    public void setShulkerNameFilters(UUID playerUuid, List<String> filters) {
         PlayerConfig config = getPlayerConfig(playerUuid);
-        config.shulkerNameFilter = filter;
+        config.setShulkerNameFilters(filters);
         setPlayerConfig(playerUuid, config);
     }
 
@@ -157,7 +165,12 @@ public class ServerConfig {
      * Récupère le nom de filtre pour les shulker boxes d'un joueur
      */
     public String getShulkerNameFilter(UUID playerUuid) {
-        return getPlayerConfig(playerUuid).shulkerNameFilter;
+        PlayerConfig config = getPlayerConfig(playerUuid);
+        return config.shulkerNameFilters.isEmpty() ? "" : config.shulkerNameFilters.getFirst();
+    }
+
+    public List<String> getShulkerNameFilters(UUID playerUuid) {
+        return List.copyOf(getPlayerConfig(playerUuid).shulkerNameFilters);
     }
 
     public void setTeamTagEnabled(UUID playerUuid, boolean enabled) {
@@ -207,12 +220,38 @@ public class ServerConfig {
         public boolean showRefillMessages = true;
         public boolean filterByName = false;
         public String shulkerNameFilter = "restock same";
+        public List<String> shulkerNameFilters = new ArrayList<>(List.of("restock same"));
         public boolean teamTagEnabled = false;
         public String teamTag = "";
         public String teamTagPlayerName = "";
         public String teamTagTeamName = "";
 
         public PlayerConfig() {
+        }
+
+        public void setShulkerNameFilters(List<String> filters) {
+            List<String> normalizedFilters = new ArrayList<>();
+            if (filters != null) {
+                for (String filter : filters) {
+                    if (filter != null && !filter.trim().isEmpty()) {
+                        normalizedFilters.add(filter.trim());
+                    }
+                }
+            }
+
+            this.shulkerNameFilters = normalizedFilters;
+            this.shulkerNameFilter = normalizedFilters.isEmpty() ? "" : normalizedFilters.getFirst();
+        }
+
+        public void ensureDefaults() {
+            if (shulkerNameFilters == null) {
+                shulkerNameFilters = new ArrayList<>();
+            }
+            if (shulkerNameFilters.isEmpty() && shulkerNameFilter != null && !shulkerNameFilter.trim().isEmpty()) {
+                shulkerNameFilters.add(shulkerNameFilter.trim());
+            } else {
+                setShulkerNameFilters(shulkerNameFilters);
+            }
         }
     }
 }

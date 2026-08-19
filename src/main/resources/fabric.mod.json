@@ -44,6 +44,7 @@
   "depends": {
     "fabricloader": ">=${loader_version}",
     "fabric-api": "*",
+    "malilib": "*",
     "minecraft": "${minecraft_version}"
   }
 }

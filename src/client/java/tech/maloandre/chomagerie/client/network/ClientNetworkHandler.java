@@ -80,7 +80,7 @@ public class ClientNetworkHandler {
                 config.shulkerRefill.isEnabled(),
                 config.shulkerRefill.shouldShowRefillMessages(),
                 config.shulkerRefill.isFilterByNameEnabled(),
-                config.shulkerRefill.getShulkerNameFilter(),
+                config.shulkerRefill.getShulkerNameFilters(),
                 config.teamTag.isEnabled(),
                 config.teamTag.getFormattedTag()
         );
@@ -146,4 +146,3 @@ public class ClientNetworkHandler {
         client.disconnect(new DisconnectedScreen(new TitleScreen(), title, reason), false);
     }
 }
-
