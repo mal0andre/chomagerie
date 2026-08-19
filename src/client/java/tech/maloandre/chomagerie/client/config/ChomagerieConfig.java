@@ -9,6 +9,8 @@ import tech.maloandre.chomagerie.config.ModState;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ChomagerieConfig {
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
@@ -20,7 +22,6 @@ public class ChomagerieConfig {
     public ShulkerRefillConfig shulkerRefill = new ShulkerRefillConfig();
 
     public TeamTagConfig teamTag = new TeamTagConfig();
-    public ServerTeamsMenuConfig serverTeams = new ServerTeamsMenuConfig();
 
     // Notifications configuration
     public NotificationsConfig notifications = new NotificationsConfig();
@@ -49,14 +50,11 @@ public class ChomagerieConfig {
                     if (config.shulkerRefill == null) {
                         config.shulkerRefill = new ShulkerRefillConfig();
                     }
+                    config.shulkerRefill.ensureDefaults();
                     if (config.teamTag == null) {
                         config.teamTag = new TeamTagConfig();
                     }
                     config.teamTag.ensureDefaults();
-                    if (config.serverTeams == null) {
-                        config.serverTeams = new ServerTeamsMenuConfig();
-                    }
-                    config.serverTeams.ensureDefaults();
                     if (config.notifications == null) {
                         config.notifications = new NotificationsConfig();
                     }
@@ -103,14 +101,11 @@ public class ChomagerieConfig {
                     // Mettre à jour l'instance actuelle avec les valeurs chargées
                     if (loaded.shulkerRefill != null) {
                         this.shulkerRefill = loaded.shulkerRefill;
+                        this.shulkerRefill.ensureDefaults();
                     }
                     if (loaded.teamTag != null) {
                         this.teamTag = loaded.teamTag;
                         this.teamTag.ensureDefaults();
-                    }
-                    if (loaded.serverTeams != null) {
-                        this.serverTeams = loaded.serverTeams;
-                        this.serverTeams.ensureDefaults();
                     }
                     if (loaded.notifications != null) {
                         this.notifications = loaded.notifications;
@@ -131,6 +126,7 @@ public class ChomagerieConfig {
         public boolean playSounds = true;
         public boolean filterByName = false;
         public String shulkerNameFilter = "restock same";
+        public List<String> shulkerNameFilters = new ArrayList<>(List.of("restock same"));
 
         public boolean isEnabled() {
             return enabled;
@@ -165,11 +161,42 @@ public class ChomagerieConfig {
         }
 
         public String getShulkerNameFilter() {
-            return shulkerNameFilter;
+            ensureDefaults();
+            return shulkerNameFilters.isEmpty() ? "" : shulkerNameFilters.getFirst();
         }
 
         public void setShulkerNameFilter(String name) {
-            this.shulkerNameFilter = name;
+            setShulkerNameFilters(List.of(name == null ? "" : name));
+        }
+
+        public List<String> getShulkerNameFilters() {
+            ensureDefaults();
+            return List.copyOf(shulkerNameFilters);
+        }
+
+        public void setShulkerNameFilters(List<String> names) {
+            List<String> normalizedNames = new ArrayList<>();
+            if (names != null) {
+                for (String name : names) {
+                    if (name != null && !name.trim().isEmpty()) {
+                        normalizedNames.add(name.trim());
+                    }
+                }
+            }
+
+            this.shulkerNameFilters = normalizedNames;
+            this.shulkerNameFilter = normalizedNames.isEmpty() ? "" : normalizedNames.getFirst();
+        }
+
+        public void ensureDefaults() {
+            if (shulkerNameFilters == null) {
+                shulkerNameFilters = new ArrayList<>();
+            }
+            if (shulkerNameFilters.isEmpty() && shulkerNameFilter != null && !shulkerNameFilter.trim().isEmpty()) {
+                shulkerNameFilters.add(shulkerNameFilter.trim());
+            } else {
+                setShulkerNameFilters(shulkerNameFilters);
+            }
         }
     }
 
@@ -181,6 +208,7 @@ public class ChomagerieConfig {
         public MinecraftColor selectedColor = MinecraftColor.AQUA;
         public String gradientStartColor = "#977272";
         public String gradientEndColor = "#E32B2B";
+        public List<String> gradientColors = new ArrayList<>(List.of("#977272", "#E32B2B"));
 
         public boolean isEnabled() {
             return enabled;
@@ -220,10 +248,12 @@ public class ChomagerieConfig {
 
         public void setGradientStartColor(String gradientStartColor) {
             this.gradientStartColor = normalizeHexColor(gradientStartColor, "#977272");
+            ensureGradientColorEndpoints();
         }
 
         public void setGradientStartColor(int rgb) {
             this.gradientStartColor = toHexColor(rgb);
+            ensureGradientColorEndpoints();
         }
 
         public String getGradientEndColor() {
@@ -232,10 +262,48 @@ public class ChomagerieConfig {
 
         public void setGradientEndColor(String gradientEndColor) {
             this.gradientEndColor = normalizeHexColor(gradientEndColor, "#E32B2B");
+            ensureGradientColorEndpoints();
         }
 
         public void setGradientEndColor(int rgb) {
             this.gradientEndColor = toHexColor(rgb);
+            ensureGradientColorEndpoints();
+        }
+
+        public List<String> getGradientColors() {
+            ensureDefaults();
+            return List.copyOf(gradientColors);
+        }
+
+        public void setGradientColors(List<String> colors) {
+            List<String> normalizedColors = new ArrayList<>();
+            if (colors != null) {
+                for (String color : colors) {
+                    normalizedColors.add(normalizeHexColor(color, ""));
+                }
+            }
+
+            normalizedColors.removeIf(String::isBlank);
+            if (normalizedColors.size() < 2) {
+                normalizedColors = new ArrayList<>(List.of(
+                        normalizeHexColor(gradientStartColor, "#977272"),
+                        normalizeHexColor(gradientEndColor, "#E32B2B")
+                ));
+            }
+
+            this.gradientColors = normalizedColors;
+            this.gradientStartColor = normalizedColors.getFirst();
+            this.gradientEndColor = normalizedColors.getLast();
+        }
+
+        private void ensureGradientColorEndpoints() {
+            if (gradientColors == null || gradientColors.size() < 2) {
+                gradientColors = new ArrayList<>(List.of(gradientStartColor, gradientEndColor));
+                return;
+            }
+
+            gradientColors.set(0, gradientStartColor);
+            gradientColors.set(gradientColors.size() - 1, gradientEndColor);
         }
 
         public void ensureDefaults() {
@@ -250,6 +318,11 @@ public class ChomagerieConfig {
             }
             gradientStartColor = normalizeHexColor(gradientStartColor, "#977272");
             gradientEndColor = normalizeHexColor(gradientEndColor, "#E32B2B");
+            if (gradientColors == null || gradientColors.size() < 2) {
+                gradientColors = new ArrayList<>(List.of(gradientStartColor, gradientEndColor));
+            } else {
+                setGradientColors(gradientColors);
+            }
         }
 
         public String getFormattedTag() {
@@ -257,7 +330,7 @@ public class ChomagerieConfig {
             String baseTag = stripColorCodes(tag);
             return switch (colorMode) {
                 case SOLID -> selectedColor.code + baseTag;
-                case GRADIENT -> "<gradient:" + gradientStartColor + ":" + gradientEndColor + ">" + baseTag;
+                case GRADIENT -> "<gradient:" + String.join(":", getGradientColors()) + ">" + baseTag;
                 case RAINBOW -> rainbowTag(baseTag);
                 case MANUAL -> tag;
             };
@@ -395,43 +468,6 @@ public class ChomagerieConfig {
 
         public String getCode() {
             return code;
-        }
-
-        public String getLabel() {
-            return label;
-        }
-    }
-
-    public static class ServerTeamsMenuConfig {
-        public String selectedTeamName = "";
-        public String text = "";
-        public ServerTeamAction action = ServerTeamAction.REFRESH;
-        public boolean runAction = false;
-
-        public void ensureDefaults() {
-            if (selectedTeamName == null) {
-                selectedTeamName = "";
-            }
-            if (text == null) {
-                text = "";
-            }
-            if (action == null) {
-                action = ServerTeamAction.REFRESH;
-            }
-        }
-    }
-
-    public enum ServerTeamAction {
-        REFRESH("Refresh list"),
-        CREATE("Create team"),
-        SET_DISPLAY("Set display name"),
-        SET_PREFIX("Set prefix"),
-        SET_SUFFIX("Set suffix");
-
-        private final String label;
-
-        ServerTeamAction(String label) {
-            this.label = label;
         }
 
         public String getLabel() {

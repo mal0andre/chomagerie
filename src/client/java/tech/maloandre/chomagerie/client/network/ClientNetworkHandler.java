@@ -2,14 +2,18 @@ package tech.maloandre.chomagerie.client.network;
 
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.DisconnectedScreen;
+import net.minecraft.client.gui.screens.TitleScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import tech.maloandre.chomagerie.Chomagerie;
 import tech.maloandre.chomagerie.client.config.ChomagerieConfig;
 import tech.maloandre.chomagerie.network.ConfigSyncPayload;
 import tech.maloandre.chomagerie.network.RefillNotificationPayload;
 import tech.maloandre.chomagerie.network.TeamManageRequestPayload;
 import tech.maloandre.chomagerie.network.TeamManageSyncPayload;
+import tech.maloandre.chomagerie.network.VersionCheckPayload;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +30,21 @@ public class ClientNetworkHandler {
 
     public static boolean canManageServerTeams() {
         return ClientPlayNetworking.canSend(TeamManageRequestPayload.ID);
+    }
+
+    public static boolean syncVersionWithServer() {
+        if (!ClientPlayNetworking.canSend(VersionCheckPayload.ID)) {
+            if (ClientPlayNetworking.canSend(ConfigSyncPayload.ID)) {
+                disconnectWithVersionMessage("Chomagerie: version serveur incompatible ou trop ancienne. "
+                        + "Client: " + Chomagerie.MOD_VERSION + ". Mets le mod Chomagerie du serveur a jour.");
+                return false;
+            }
+
+            return true;
+        }
+
+        ClientPlayNetworking.send(new VersionCheckPayload(Chomagerie.MOD_VERSION));
+        return true;
     }
 
     public static void requestServerTeams() {
@@ -61,7 +80,7 @@ public class ClientNetworkHandler {
                 config.shulkerRefill.isEnabled(),
                 config.shulkerRefill.shouldShowRefillMessages(),
                 config.shulkerRefill.isFilterByNameEnabled(),
-                config.shulkerRefill.getShulkerNameFilter(),
+                config.shulkerRefill.getShulkerNameFilters(),
                 config.teamTag.isEnabled(),
                 config.teamTag.getFormattedTag()
         );
@@ -74,6 +93,15 @@ public class ClientNetworkHandler {
      * Initializes network handlers on client side
      */
     public static void init() {
+        ClientPlayNetworking.registerGlobalReceiver(VersionCheckPayload.ID, (payload, context) -> {
+            context.client().execute(() -> {
+                if (!Chomagerie.MOD_VERSION.equals(payload.modVersion())) {
+                    disconnectWithVersionMessage("Chomagerie: versions differentes entre le client et le serveur. "
+                            + "Client: " + Chomagerie.MOD_VERSION + ", serveur: " + payload.modVersion() + ".");
+                }
+            });
+        });
+
         ClientPlayNetworking.registerGlobalReceiver(TeamManageSyncPayload.ID, (payload, context) -> {
             context.client().execute(() -> serverTeams = new ArrayList<>(payload.teams()));
         });
@@ -105,5 +133,16 @@ public class ClientNetworkHandler {
             });
         });
     }
-}
 
+    private static void disconnectWithVersionMessage(String message) {
+        Minecraft client = Minecraft.getInstance();
+        Component title = Component.literal("Connexion refusee");
+        Component reason = Component.literal(message);
+
+        if (client.getConnection() != null) {
+            client.getConnection().getConnection().disconnect(reason);
+        }
+
+        client.disconnect(new DisconnectedScreen(new TitleScreen(), title, reason), false);
+    }
+}
