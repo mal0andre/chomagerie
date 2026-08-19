@@ -1,7 +1,6 @@
 package tech.maloandre.chomagerie;
 
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
@@ -10,7 +9,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import tech.maloandre.chomagerie.command.ChomagerieTeamCommand;
 import tech.maloandre.chomagerie.config.ServerConfig;
 import tech.maloandre.chomagerie.event.ItemStackDepletedCallback;
 import tech.maloandre.chomagerie.gamerule.ModGameRules;
@@ -50,9 +48,6 @@ public class Chomagerie implements ModInitializer {
         VersionCheckPayload.registerServerHandler();
         ConfigSyncPayload.registerServerHandler();
         TeamManageRequestPayload.registerServerHandler();
-
-        CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) ->
-                ChomagerieTeamCommand.register(dispatcher));
 
         // Detect when players connect
         ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> {
