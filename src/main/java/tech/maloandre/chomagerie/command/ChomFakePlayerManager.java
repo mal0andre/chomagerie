@@ -2,6 +2,9 @@ package tech.maloandre.chomagerie.command;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.yggdrasil.ProfileResult;
@@ -70,11 +73,14 @@ public final class ChomFakePlayerManager {
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     private static final Path CONFIG_DIR = FabricLoader.getInstance().getConfigDir().resolve("chomagerie");
     private static final Path PERSISTENT_PLAYERS_PATH = CONFIG_DIR.resolve("chomplayers.json");
+    private static final Path REAL_PLAYERS_PATH = CONFIG_DIR.resolve("real_players.json");
     private static final Map<UUID, ChomFakePlayerState> PLAYERS = new HashMap<>();
     private static final Set<UUID> PENDING_FAKE_PLAYERS = new HashSet<>();
     private static final Map<String, PersistentPlayerData> PERSISTENT_PLAYERS = new HashMap<>();
+    private static final Set<String> REAL_PLAYER_NAMES = new HashSet<>();
     private static final double REACH = 4.5D;
     private static boolean registered;
+    private static boolean loadedRealPlayers;
     private static int tickCounter;
 
     private ChomFakePlayerManager() {
@@ -225,7 +231,23 @@ public final class ChomFakePlayerManager {
         }
 
         String normalizedName = name.toLowerCase(Locale.ROOT);
-        return !PERSISTENT_PLAYERS.containsKey(normalizedName);
+        return !PERSISTENT_PLAYERS.containsKey(normalizedName) && !isProtectedRealPlayerName(server, name);
+    }
+
+    public static boolean isProtectedRealPlayerName(MinecraftServer server, String name) {
+        loadRealPlayers(server);
+        return REAL_PLAYER_NAMES.contains(name.toLowerCase(Locale.ROOT));
+    }
+
+    public static void recordRealPlayerLogin(MinecraftServer server, ServerPlayer player) {
+        if (isManagedFake(player)) {
+            return;
+        }
+
+        loadRealPlayers(server);
+        if (REAL_PLAYER_NAMES.add(player.getScoreboardName().toLowerCase(Locale.ROOT))) {
+            saveRealPlayers();
+        }
     }
 
     public static void setAction(ServerPlayer player, ChomPlayerAction action, ActionSchedule schedule) {
@@ -476,6 +498,70 @@ public final class ChomFakePlayerManager {
         try {
             Files.createDirectories(CONFIG_DIR);
             Files.writeString(PERSISTENT_PLAYERS_PATH, GSON.toJson(PERSISTENT_PLAYERS));
+        } catch (IOException ignored) {
+        }
+    }
+
+    private static void loadRealPlayers(MinecraftServer server) {
+        if (loadedRealPlayers) {
+            return;
+        }
+
+        loadedRealPlayers = true;
+        try {
+            Files.createDirectories(CONFIG_DIR);
+            if (Files.exists(REAL_PLAYERS_PATH)) {
+                Set<String> loaded = GSON.fromJson(
+                        Files.readString(REAL_PLAYERS_PATH),
+                        new TypeToken<Set<String>>() {
+                        }.getType()
+                );
+                if (loaded != null) {
+                    for (String name : loaded) {
+                        if (name != null && !name.isBlank()) {
+                            REAL_PLAYER_NAMES.add(name.toLowerCase(Locale.ROOT));
+                        }
+                    }
+                }
+            }
+        } catch (IOException ignored) {
+        }
+
+        loadRealPlayersFromUserCache(server);
+        saveRealPlayers();
+    }
+
+    private static void loadRealPlayersFromUserCache(MinecraftServer server) {
+        Path userCachePath = server.getServerDirectory().resolve("usercache.json");
+        if (!Files.exists(userCachePath)) {
+            return;
+        }
+
+        try {
+            JsonArray entries = GSON.fromJson(Files.readString(userCachePath), JsonArray.class);
+            if (entries == null) {
+                return;
+            }
+
+            for (JsonElement entry : entries) {
+                if (!entry.isJsonObject()) {
+                    continue;
+                }
+
+                JsonObject object = entry.getAsJsonObject();
+                JsonElement name = object.get("name");
+                if (name != null && name.isJsonPrimitive()) {
+                    REAL_PLAYER_NAMES.add(name.getAsString().toLowerCase(Locale.ROOT));
+                }
+            }
+        } catch (IOException | RuntimeException ignored) {
+        }
+    }
+
+    private static void saveRealPlayers() {
+        try {
+            Files.createDirectories(CONFIG_DIR);
+            Files.writeString(REAL_PLAYERS_PATH, GSON.toJson(REAL_PLAYER_NAMES));
         } catch (IOException ignored) {
         }
     }

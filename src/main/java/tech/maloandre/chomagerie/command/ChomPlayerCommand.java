@@ -35,6 +35,8 @@ public final class ChomPlayerCommand {
             new SimpleCommandExceptionType(Component.literal("Chomplayer introuvable."));
     private static final SimpleCommandExceptionType PLAYER_ALREADY_EXISTS =
             new SimpleCommandExceptionType(Component.literal("Un joueur avec ce nom existe deja."));
+    private static final SimpleCommandExceptionType REAL_PLAYER_NAME =
+            new SimpleCommandExceptionType(Component.literal("Ce nom appartient a un vrai joueur."));
 
     private ChomPlayerCommand() {
     }
@@ -167,6 +169,9 @@ public final class ChomPlayerCommand {
 
     private static int spawn(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
         String name = StringArgumentType.getString(context, "name");
+        if (ChomFakePlayerManager.isProtectedRealPlayerName(context.getSource().getServer(), name)) {
+            throw REAL_PLAYER_NAME.create();
+        }
         if (!ChomFakePlayerManager.canSpawnName(context.getSource().getServer(), name)) {
             throw PLAYER_ALREADY_EXISTS.create();
         }
@@ -174,7 +179,7 @@ public final class ChomPlayerCommand {
         ServerPlayer source = context.getSource().getPlayerOrException();
         SpawnOptions options = SpawnOptions.fromContext(context);
         ServerPlayer player = ChomFakePlayerManager.spawn(source, name, options.level(), options.position(), options.yaw(), options.pitch(), options.gameMode(), source.getScoreboardName());
-        actionBar(context, "Spawn: " + player.getScoreboardName());
+        actionBar(context, "Spawn : " + player.getScoreboardName());
         return 1;
     }
 
@@ -192,14 +197,14 @@ public final class ChomPlayerCommand {
     private static int kill(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
         ServerPlayer player = currentPlayer(context);
         ChomFakePlayerManager.kill(player);
-        actionBar(context, "Retire: " + player.getScoreboardName());
+        actionBar(context, "Kill : " + player.getScoreboardName());
         return 1;
     }
 
     private static int stop(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
         ServerPlayer player = currentPlayer(context);
         ChomFakePlayerManager.stop(player);
-        actionBar(context, "Stop: " + player.getScoreboardName());
+        actionBar(context, "Stop : " + player.getScoreboardName());
         return 1;
     }
 
@@ -218,14 +223,14 @@ public final class ChomPlayerCommand {
     private static int move(CommandContext<CommandSourceStack> context, ChomFakePlayerManager.MoveDirection direction) throws CommandSyntaxException {
         ServerPlayer player = currentPlayer(context);
         ChomFakePlayerManager.move(player, direction);
-        actionBar(context, "Move " + directionLabel(direction) + ": " + player.getScoreboardName());
+        actionBar(context, "Move : " + directionLabel(direction) + ": " + player.getScoreboardName());
         return 1;
     }
 
     private static int look(CommandContext<CommandSourceStack> context, float yaw, float pitch) throws CommandSyntaxException {
         ServerPlayer player = currentPlayer(context);
         ChomFakePlayerManager.look(player, yaw, pitch);
-        actionBar(context, "Regarde: " + player.getScoreboardName());
+        actionBar(context, "Regarde : " + player.getScoreboardName());
         return 1;
     }
 
@@ -233,21 +238,21 @@ public final class ChomPlayerCommand {
         Vec3 pos = Vec3Argument.getVec3(context, "pos");
         ServerPlayer player = currentPlayer(context);
         ChomFakePlayerManager.lookAt(player, pos);
-        actionBar(context, "Regarde la position: " + player.getScoreboardName());
+        actionBar(context, "Regarde la position : " + player.getScoreboardName());
         return 1;
     }
 
     private static int turn(CommandContext<CommandSourceStack> context, float yawOffset) throws CommandSyntaxException {
         ServerPlayer player = currentPlayer(context);
         ChomFakePlayerManager.turn(player, yawOffset);
-        actionBar(context, "Tourne: " + player.getScoreboardName());
+        actionBar(context, "Tourne : " + player.getScoreboardName());
         return 1;
     }
 
     private static int sneak(CommandContext<CommandSourceStack> context, boolean enabled) throws CommandSyntaxException {
         ServerPlayer player = currentPlayer(context);
         ChomFakePlayerManager.sneak(player, enabled);
-        actionBar(context, (enabled ? "Sneak: " : "Sneak off: ") + player.getScoreboardName());
+        actionBar(context, (enabled ? "Sneak : " : "Sneak off : ") + player.getScoreboardName());
         return 1;
     }
 
@@ -262,7 +267,7 @@ public final class ChomPlayerCommand {
     private static int drop(CommandContext<CommandSourceStack> context, ChomFakePlayerManager.DropMode mode) throws CommandSyntaxException {
         ServerPlayer player = currentPlayer(context);
         ChomFakePlayerManager.drop(player, mode);
-        actionBar(context, "Drop: " + player.getScoreboardName());
+        actionBar(context, "Drop : " + player.getScoreboardName());
         return 1;
     }
 
@@ -274,28 +279,28 @@ public final class ChomPlayerCommand {
             case HOTBAR -> IntegerArgumentType.getInteger(context, "slot") - 1;
         };
         ChomFakePlayerManager.dropSlot(player, mode, slot);
-        actionBar(context, "Drop slot: " + player.getScoreboardName());
+        actionBar(context, "Drop slot : " + player.getScoreboardName());
         return 1;
     }
 
     private static int swapHands(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
         ServerPlayer player = currentPlayer(context);
         ChomFakePlayerManager.swapHands(player);
-        actionBar(context, "Main changee: " + player.getScoreboardName());
+        actionBar(context, "Main changée : " + player.getScoreboardName());
         return 1;
     }
 
     private static int persist(CommandContext<CommandSourceStack> context, boolean enabled) throws CommandSyntaxException {
         ServerPlayer player = currentPlayer(context);
         ChomFakePlayerManager.setPersistent(player, enabled);
-        actionBar(context, (enabled ? "Persistant: " : "Non persistant: ") + player.getScoreboardName());
+        actionBar(context, (enabled ? "Persistant : " : "Non persistant: ") + player.getScoreboardName());
         return 1;
     }
 
     private static int inventory(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
         ServerPlayer player = currentPlayer(context);
         ChomFakePlayerManager.openInventory(context.getSource().getPlayerOrException(), player);
-        actionBar(context, "Inventaire: " + player.getScoreboardName());
+        actionBar(context, "Inventaire : " + player.getScoreboardName());
         return 1;
     }
 
@@ -305,14 +310,14 @@ public final class ChomPlayerCommand {
             actionBar(context, "Rien a monter.");
             return 0;
         }
-        actionBar(context, "Monte: " + player.getScoreboardName());
+        actionBar(context, "Monte : " + player.getScoreboardName());
         return 1;
     }
 
     private static int dismount(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
         ServerPlayer player = currentPlayer(context);
         ChomFakePlayerManager.dismount(player);
-        actionBar(context, "Descend: " + player.getScoreboardName());
+        actionBar(context, "Descend : " + player.getScoreboardName());
         return 1;
     }
 

@@ -25,5 +25,6 @@ public class PlayerListMixin {
     @Inject(method = "placeNewPlayer", at = @At("HEAD"))
     private void chomagerie$removeShadowBeforeReconnect(Connection connection, ServerPlayer player, CommonListenerCookie cookie, CallbackInfo ci) {
         ChomFakePlayerManager.removeForReconnect((PlayerList) (Object) this, player.getUUID());
+        ChomFakePlayerManager.recordRealPlayerLogin(player.level().getServer(), player);
     }
 }
