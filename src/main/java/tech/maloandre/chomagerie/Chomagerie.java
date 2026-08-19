@@ -5,6 +5,8 @@ import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,12 +18,17 @@ import tech.maloandre.chomagerie.network.ConfigSyncPayload;
 import tech.maloandre.chomagerie.network.RefillNotificationPayload;
 import tech.maloandre.chomagerie.network.TeamManageRequestPayload;
 import tech.maloandre.chomagerie.network.TeamManageSyncPayload;
+import tech.maloandre.chomagerie.network.VersionCheckPayload;
 import tech.maloandre.chomagerie.util.ShulkerRefillHandler;
 
 public class Chomagerie implements ModInitializer {
 
     public static final String MOD_ID = "chomagerie";
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
+    public static final String MOD_VERSION = FabricLoader.getInstance()
+            .getModContainer(MOD_ID)
+            .map(container -> container.getMetadata().getVersion().getFriendlyString())
+            .orElse("unknown");
 
     @Override
     public void onInitialize() {
@@ -32,12 +39,15 @@ public class Chomagerie implements ModInitializer {
         ModGameRules.register();
 
         // Register network packet types
+        PayloadTypeRegistry.serverboundPlay().register(VersionCheckPayload.ID, VersionCheckPayload.CODEC);
         PayloadTypeRegistry.serverboundPlay().register(ConfigSyncPayload.ID, ConfigSyncPayload.CODEC);
         PayloadTypeRegistry.serverboundPlay().register(TeamManageRequestPayload.ID, TeamManageRequestPayload.CODEC);
         PayloadTypeRegistry.clientboundPlay().register(RefillNotificationPayload.ID, RefillNotificationPayload.CODEC);
         PayloadTypeRegistry.clientboundPlay().register(TeamManageSyncPayload.ID, TeamManageSyncPayload.CODEC);
+        PayloadTypeRegistry.clientboundPlay().register(VersionCheckPayload.ID, VersionCheckPayload.CODEC);
 
         // Register server-side network handler
+        VersionCheckPayload.registerServerHandler();
         ConfigSyncPayload.registerServerHandler();
         TeamManageRequestPayload.registerServerHandler();
 
@@ -46,9 +56,26 @@ public class Chomagerie implements ModInitializer {
 
         // Detect when players connect
         ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> {
-            // Do nothing here. If the player has the mod, they will send their config automatically
-            // If after a few seconds they haven't sent a config, we assume they don't have the mod
-            LOGGER.debug("Player {} connected, waiting for configuration...", handler.player.getName().getString());
+            ServerPlayer player = handler.player;
+            if (!ServerPlayNetworking.canSend(player, VersionCheckPayload.ID)) {
+                if (!ServerPlayNetworking.canSend(player, RefillNotificationPayload.ID)
+                        && !ServerPlayNetworking.canSend(player, TeamManageSyncPayload.ID)) {
+                    LOGGER.debug("Player {} connected without Chomagerie client mod.",
+                            player.getName().getString());
+                    return;
+                }
+
+                String message = "Chomagerie: version client incompatible ou trop ancienne. "
+                        + "Serveur: " + MOD_VERSION + ". Mets ton mod Chomagerie a jour.";
+                LOGGER.warn("Player {} has no Chomagerie version-check channel. Disconnecting with a clear message.",
+                        player.getName().getString());
+                handler.disconnect(Component.literal(message));
+                return;
+            }
+
+            ServerPlayNetworking.send(player, new VersionCheckPayload(MOD_VERSION));
+            LOGGER.debug("Player {} connected, sent Chomagerie server version {}",
+                    player.getName().getString(), MOD_VERSION);
         });
 
         // Register automatic refill event from shulker boxes

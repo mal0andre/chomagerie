@@ -33,8 +33,10 @@ public class ChomagerieClient implements ClientModInitializer {
 
         // Synchronize config to server on connection
         ClientPlayConnectionEvents.JOIN.register((handler, sender, client) -> {
-            ClientNetworkHandler.sendConfigToServer();
-            LOGGER.info("Configuration sent to server");
+            if (ClientNetworkHandler.syncVersionWithServer()) {
+                ClientNetworkHandler.sendConfigToServer();
+                LOGGER.info("Configuration sent to server");
+            }
         });
 
         // Register client commands
