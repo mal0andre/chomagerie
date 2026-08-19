@@ -99,12 +99,7 @@ public final class ChomagerieTeamCommand {
         String tag = normalizeTag(StringArgumentType.getString(context, "tag"));
         applyTeamTag(context.getSource().getServer().getScoreboard(), player, tag);
 
-        context.getSource().sendSuccess(
-                () -> Component.literal("[Chomagerie] Tag defini sur ")
-                        .withStyle(ChatFormatting.GREEN)
-                        .append(formatTagPrefix(tag)),
-                false
-        );
+        actionBar(context, Component.literal("Tag: ").withStyle(ChatFormatting.GREEN).append(formatTagPrefix(tag)));
         return 1;
     }
 
@@ -117,12 +112,7 @@ public final class ChomagerieTeamCommand {
         String formattedTag = tag;
 
         applyTeamTag(context.getSource().getServer().getScoreboard(), player, tag);
-        context.getSource().sendSuccess(
-                () -> Component.literal("[Chomagerie] Tag gradient defini sur ")
-                        .withStyle(ChatFormatting.GREEN)
-                        .append(formatTagPrefix(formattedTag)),
-                false
-        );
+        actionBar(context, Component.literal("Tag: ").withStyle(ChatFormatting.GREEN).append(formatTagPrefix(formattedTag)));
         return 1;
     }
 
@@ -131,14 +121,11 @@ public final class ChomagerieTeamCommand {
         boolean removed = clearTeamTag(context.getSource().getServer().getScoreboard(), player);
 
         if (!removed) {
-            context.getSource().sendFailure(Component.literal("[Chomagerie] Tu n'as pas de tag Chomagerie."));
+            actionBar(context, Component.literal("Aucun tag a retirer.").withStyle(ChatFormatting.YELLOW));
             return 0;
         }
 
-        context.getSource().sendSuccess(
-                () -> Component.literal("[Chomagerie] Tag retire.").withStyle(ChatFormatting.YELLOW),
-                false
-        );
+        actionBar(context, Component.literal("Tag retire.").withStyle(ChatFormatting.YELLOW));
         return 1;
     }
 
@@ -147,19 +134,11 @@ public final class ChomagerieTeamCommand {
         Team currentTeam = context.getSource().getServer().getScoreboard().getPlayersTeam(player.getScoreboardName());
 
         if (currentTeam instanceof PlayerTeam playerTeam && playerTeam.getName().startsWith(TEAM_PREFIX)) {
-            context.getSource().sendSuccess(
-                    () -> Component.literal("[Chomagerie] Tag actuel: ")
-                            .withStyle(ChatFormatting.YELLOW)
-                            .append(playerTeam.getPlayerPrefix()),
-                    false
-            );
+            actionBar(context, Component.literal("Tag actuel: ").withStyle(ChatFormatting.YELLOW).append(playerTeam.getPlayerPrefix()));
             return 1;
         }
 
-        context.getSource().sendSuccess(
-                () -> Component.literal("[Chomagerie] Aucun tag defini.").withStyle(ChatFormatting.YELLOW),
-                false
-        );
+        actionBar(context, Component.literal("Aucun tag.").withStyle(ChatFormatting.YELLOW));
         return 0;
     }
 
@@ -247,14 +226,11 @@ public final class ChomagerieTeamCommand {
     private static int listServerTeams(CommandContext<CommandSourceStack> context) {
         ServerScoreboard scoreboard = context.getSource().getServer().getScoreboard();
         if (scoreboard.getPlayerTeams().isEmpty()) {
-            context.getSource().sendSuccess(
-                    () -> Component.literal("[Chomagerie] Aucune team scoreboard.").withStyle(ChatFormatting.YELLOW),
-                    false
-            );
+            actionBar(context, Component.literal("Aucune team.").withStyle(ChatFormatting.YELLOW));
             return 0;
         }
 
-        MutableComponent message = Component.literal("[Chomagerie] Teams: ").withStyle(ChatFormatting.YELLOW);
+        MutableComponent message = Component.literal("Teams: ").withStyle(ChatFormatting.YELLOW);
         boolean first = true;
         for (PlayerTeam team : scoreboard.getPlayerTeams()) {
             if (!first) {
@@ -263,7 +239,7 @@ public final class ChomagerieTeamCommand {
             message.append(Component.literal(getServerTeamDisplayName(team)).withStyle(ChatFormatting.AQUA));
             first = false;
         }
-        context.getSource().sendSuccess(() -> message, false);
+        actionBar(context, message);
         return scoreboard.getPlayerTeams().size();
     }
 
@@ -275,10 +251,7 @@ public final class ChomagerieTeamCommand {
         }
 
         addServerTeam(scoreboard, teamName);
-        context.getSource().sendSuccess(
-                () -> Component.literal("[Chomagerie] Team creee: " + teamName).withStyle(ChatFormatting.GREEN),
-                true
-        );
+        actionBar(context, Component.literal("Team creee: " + teamName).withStyle(ChatFormatting.GREEN));
         return 1;
     }
 
@@ -293,10 +266,7 @@ public final class ChomagerieTeamCommand {
         ServerScoreboard scoreboard = context.getSource().getServer().getScoreboard();
         PlayerTeam team = getServerTeam(context, scoreboard);
         scoreboard.removePlayerTeam(team);
-        context.getSource().sendSuccess(
-                () -> Component.literal("[Chomagerie] Team supprimee: " + team.getName()).withStyle(ChatFormatting.YELLOW),
-                true
-        );
+        actionBar(context, Component.literal("Team supprimee: " + team.getName()).withStyle(ChatFormatting.YELLOW));
         return 1;
     }
 
@@ -313,11 +283,17 @@ public final class ChomagerieTeamCommand {
         }
 
         scoreboard.onTeamChanged(team);
-        context.getSource().sendSuccess(
-                () -> Component.literal("[Chomagerie] Team " + team.getName() + " mise a jour.").withStyle(ChatFormatting.GREEN),
-                true
-        );
+        actionBar(context, Component.literal("Team mise a jour: " + team.getName()).withStyle(ChatFormatting.GREEN));
         return 1;
+    }
+
+    private static void actionBar(CommandContext<CommandSourceStack> context, Component message) {
+        if (context.getSource().getEntity() instanceof ServerPlayer player) {
+            player.sendSystemMessage(message, true);
+            return;
+        }
+
+        context.getSource().sendSuccess(() -> message, false);
     }
 
     private static PlayerTeam getServerTeam(CommandContext<CommandSourceStack> context, ServerScoreboard scoreboard) throws CommandSyntaxException {

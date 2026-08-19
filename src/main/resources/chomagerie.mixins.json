@@ -5,7 +5,9 @@
   "compatibilityLevel": "JAVA_21",
   "mixins": [
     "FarmlandBlockMixin",
-    "PlayerInventoryMixin"
+    "MinecraftServerMixin",
+    "PlayerInventoryMixin",
+    "PlayerListMixin"
   ],
   "injectors": {
     "defaultRequire": 1

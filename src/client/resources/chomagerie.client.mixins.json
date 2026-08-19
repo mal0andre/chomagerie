@@ -1,14 +1,12 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "tech.maloandre.chomagerie.mixin.client",
+  "package": "tech.maloandre.chomagerie.client.mixin",
   "compatibilityLevel": "JAVA_21",
   "client": [
+    "IntegratedServerMixin"
   ],
   "injectors": {
     "defaultRequire": 1
-  },
-  "overwrites": {
-    "requireAnnotations": true
   }
 }

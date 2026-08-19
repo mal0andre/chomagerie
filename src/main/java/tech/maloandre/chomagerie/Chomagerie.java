@@ -2,6 +2,7 @@ package tech.maloandre.chomagerie;
 
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
@@ -10,7 +11,9 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import tech.maloandre.chomagerie.command.ChomFakePlayerManager;
 import tech.maloandre.chomagerie.command.ChomagerieTeamCommand;
+import tech.maloandre.chomagerie.command.ChomPlayerCommand;
 import tech.maloandre.chomagerie.config.ServerConfig;
 import tech.maloandre.chomagerie.event.ItemStackDepletedCallback;
 import tech.maloandre.chomagerie.gamerule.ModGameRules;
@@ -52,11 +55,21 @@ public class Chomagerie implements ModInitializer {
         TeamManageRequestPayload.registerServerHandler();
 
         CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) ->
-                ChomagerieTeamCommand.register(dispatcher));
+        {
+            ChomagerieTeamCommand.register(dispatcher);
+            ChomPlayerCommand.register(dispatcher);
+        });
+        ChomFakePlayerManager.registerTickHandler();
+        ServerLifecycleEvents.SERVER_STARTED.register(ChomFakePlayerManager::spawnPersistentPlayers);
 
         // Detect when players connect
         ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> {
             ServerPlayer player = handler.player;
+            if (ChomFakePlayerManager.isManagedFake(player)) {
+                LOGGER.debug("Chomplayer {} joined without client checks.", player.getName().getString());
+                return;
+            }
+
             if (!ServerPlayNetworking.canSend(player, VersionCheckPayload.ID)) {
                 if (!ServerPlayNetworking.canSend(player, RefillNotificationPayload.ID)
                         && !ServerPlayNetworking.canSend(player, TeamManageSyncPayload.ID)) {
