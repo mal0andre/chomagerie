@@ -1,25 +1,24 @@
 ## Release
 
-### [1.5.1] - 2026-08-18
+### [1.5.2] - 2026-08-19
 
 #### Added
-- Add Team Tag support through `/chomteam` and `/teamtag`.
-- Add configurable Team Tag options in ModMenu.
-- Add Minecraft `&` color-code parsing for tags, display names, prefixes, and suffixes.
-- Add gradient tag support with `<gradient:#977272:#E32B2B>Text` and `/chomteam gradient #977272 #E32B2B Text`.
-- Add rainbow Team Tag mode in the client configuration.
-- Add OP-only team management commands: `list`, `add`, `remove`, `display`, `prefix`, and `suffix`.
-- Add autocomplete for team management commands using display names instead of raw scoreboard ids.
-- Add server-side storage for the last player name and Team Tag team identity.
+- Add a configurable Minecraft keybind to open the Chomagerie configuration menu.
+- Add MaLiLib-based configuration categories for All, ShulkerRefill, and Team Tag.
+- Add support for multiple shulker box names in the ShulkerRefill name filter.
+- Add support for multi-stop Team Tag gradients.
+- Add a MaLiLib color-list editor and color picker for Team Tag gradient colors.
+- Add English fallback language entries for the new configuration menu.
 
 #### Changed
-- Team Tag prefixes no longer use surrounding brackets.
-- Team Tag no longer changes the player's name color.
-- Team Tag teams are now stable per player UUID, so changing the tag updates the existing team instead of creating a new one.
-- Team management is command-only; the ModMenu `Server Teams` category was removed.
-- The README was rewritten to document the current feature set and commands.
+- Replace the previous configuration UI with a MaLiLib configuration screen.
+- Team Tag configuration is now handled through the menu instead of `/chomteam` and `/teamtag` commands.
+- Gradient colors are now edited as a color list instead of separate start/end text fields.
+- ShulkerRefill name filtering now accepts a list of exact names instead of a single exact name.
 
 #### Fixed
-- Prevent leftover Chomagerie tag teams from accumulating when players change tags.
-- Clean empty Chomagerie tag teams when applying or clearing a tag.
-- Update the stored scoreboard player name when a player reconnects with a changed name.
+- Fix the Minecraft controls category label for the Chomagerie keybind.
+- Fix a startup crash caused by registering key mappings before Minecraft options were available.
+- Fix missing language fallback behavior by defaulting unavailable language entries to English.
+- Fix the MaLiLib tab layout so the All tab stays inside the screen.
+- Fix raw translation keys showing in the gradient color list menu.
